@@ -1,8 +1,7 @@
 body {
+  padding: 0;
   margin: 0;
-  font-family: 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -10,4 +9,13 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+:root {
+  --color-white: #f1f1f1;
+  --color-blue: #197beb;
+  --color-dark-blue: #070723;
+  --color-black: #1e1e1e;
+  --color-white-grey: #f1f1f1;
+  --color-secondary: rgba(7, 7, 35, 0.5);
 }
