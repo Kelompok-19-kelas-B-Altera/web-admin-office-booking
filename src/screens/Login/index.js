@@ -67,6 +67,7 @@ const Login = () => {
           setAllValid("valid");
           setLoading(false);
           Cookies.set("token", response.data.data.token);
+          console.log(response)
         })
         .catch((error) => {
           setUserExist("doesn't exist");
