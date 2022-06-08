@@ -156,7 +156,7 @@ const Login = () => {
         </div>
       ) : (
         <>
-          <img src="/login.svg" alt="login-photo" />
+          <img src="/login/bg.svg" alt="login-photo" />
           <form
             className={styles.form}
             onSubmit={(e) => {
