@@ -61,7 +61,7 @@ const Login = () => {
       setLoading(true);
 
       axios
-        .post("http://108.136.240.248/api/v1/auth/login", { email, password })
+        .post("/api/v1/auth/login", { email, password })
         .then((response) => {
           setUserExist("exists");
           setAllValid("valid");
