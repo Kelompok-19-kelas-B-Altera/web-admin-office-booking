@@ -16,5 +16,6 @@ const isLocalDev = (isDev) => {
 };
 
 const axiosInstance = isLocalDev(isDev);
-console.log(axiosInstance);
+axiosInstance.defaults.headers['Content-Type'] = 'application/json';
+
 export default axiosInstance;
