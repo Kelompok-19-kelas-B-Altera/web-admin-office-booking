@@ -9,13 +9,13 @@ const ContentHeader = ({ title }) => {
       <div className="flex">
         <p className={pathUrlArr[1] === "" ? "text-[#070723]" : "text-[#838391]"}>Dashboard</p>
         {pathUrlArr.slice(1).map((e) => (
-          <>
+          <div key={e}>
             {pathUrlArr[1] === "" ? (
               <></>
             ) : (
               <p className="capitalize">&nbsp;{`/ ${e.match("-") ? e.split("-").join(" ") : e}`}</p>
             )}
-          </>
+          </div>
         ))}
       </div>
     </header>
