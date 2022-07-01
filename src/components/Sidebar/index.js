@@ -43,11 +43,11 @@ const Sidebar = ({active}) => {
   ]
 
   return(
-    <div className={`bg-white h-full w-[16%] pt-10 ${active ? "flex" : "hidden"}`}> 
+    <div className={`bg-white h-auto w-[16%] pt-10 ${active ? "flex" : "hidden"}`}> 
       <div className="w-full">
         {
           sidebar.map((data, index) => (
-            <NavLink to={data.link}>
+            <NavLink to={data.link} key={index}>
             {({ isActive }) => (
               <div className={`${isActive ? "border-l-4 border-[#197BEB]" : "border-l-4 border-white"}  flex gap-3 py-3 px-8 mb-3`}>  
                 
