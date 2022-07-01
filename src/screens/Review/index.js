@@ -13,7 +13,7 @@ const Review = () => {
       <ContentHeader title="review" />
       <ContentContainer>
         <EntriesAndSearchComponent />
-        <div className="flex gap-[40px]">
+        <div className="flex gap-[40px] h-[395px]">
           <div className="flex gap-3 min-w-[220px]">
             <img
               src="/login/bg.svg"
