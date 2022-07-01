@@ -1,4 +1,4 @@
-import { ContentHeader, ContentContainer, ContentLayout } from "../../components";
+import { ContentHeader, ContentContainer, ContentLayout, CardInfo } from "../../components";
 
 const HomeDashboard = () => {
   return(
@@ -6,6 +6,7 @@ const HomeDashboard = () => {
       <ContentHeader/>
       <ContentContainer>
         <h1>Ini Test Aja</h1>
+        <CardInfo title={"Total Office"} color={"#4CAF50"} count={"210"}/>
       </ContentContainer>
     </ContentLayout>
   )
