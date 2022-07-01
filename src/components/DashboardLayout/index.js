@@ -4,7 +4,7 @@ import Header from '../Header';
 import { useState } from 'react';
 
 const DashboardLayout = () => {
-  const [active , setActive] = useState(false);
+  const [active , setActive] = useState(true);
   
   return(
     <>
