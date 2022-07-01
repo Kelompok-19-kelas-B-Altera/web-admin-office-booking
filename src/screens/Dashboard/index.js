@@ -1,10 +1,13 @@
-import { ContentHeader } from "../../components";
+import { ContentHeader, ContentContainer, ContentLayout } from "../../components";
 
 const HomeDashboard = () => {
   return(
-    <div className="p-8">
+    <ContentLayout>
       <ContentHeader/>
-    </div>
+      <ContentContainer>
+        <h1>Ini Test Aja</h1>
+      </ContentContainer>
+    </ContentLayout>
   )
 }
 

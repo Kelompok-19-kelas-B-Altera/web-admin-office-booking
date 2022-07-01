@@ -10,7 +10,7 @@ const TestPage = () => {
     <ContentLayout>
       <ContentHeader/>
       <ContentContainer>
-        <h1>Ini Test Aja {title}</h1>
+        <h1>Ini Test Aja</h1>
       </ContentContainer>
     </ContentLayout>
     
