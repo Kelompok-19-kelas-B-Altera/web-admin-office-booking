@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Login, Dashboard, User, Review, Chat } from "./screens";
 
 //Component
-import { TestComp, DashboardLayout, TestPage } from "./components";
+import { DashboardLayout, TestPage } from "./components"
 
 function App() {
   return (
