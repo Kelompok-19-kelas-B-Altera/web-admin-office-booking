@@ -2,10 +2,11 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 //Screen or Layout Web
-import { Login, Dashboard, User, Review, Chat } from "./screens";
+import { Login, Dashboard, User, Review, Office, OfficeAvailable, OfficeList, OfficeBooked, OfficeHistory } from "./screens";
+
 
 //Component
-import { DashboardLayout, TestPage } from "./components"
+import { DashboardLayout, TestPage } from "./components";
 
 function App() {
   return (
@@ -15,9 +16,15 @@ function App() {
           <Route element={<DashboardLayout />}>
             <Route index path="/" element={<Dashboard />} />
             <Route index path="/:title" element={<TestPage />} />
-            <Route index path="/User" element={<User />} />
-            <Route index path="/Review" element={<Review />} />
-            <Route index path="/Chat" element={<Chat />} />
+            <Route path="/User" element={<User />} />
+            <Route path="/Review" element={<Review />} />
+            <Route path="/Office" element={<Office />}>
+              <Route index path="/Office/available-office" element={<OfficeAvailable />} />
+              <Route path="/Office/booked-office" element={<OfficeBooked />} />
+              <Route path="/Office/office-list" element={<OfficeList />} />
+              <Route path="/Office/history-office" element={<OfficeHistory />} />
+            </Route>
+
           </Route>
           <Route path="/login" element={<Login />} />
           <Route
