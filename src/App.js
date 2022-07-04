@@ -2,7 +2,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 //Screen or Layout Web
-import { Login, Dashboard, User, Review, Office } from "./screens";
+import { Login, Dashboard, User, Review, Office, OfficeAvailable, OfficeList, OfficeBooked, OfficeHistory } from "./screens";
 
 //Component
 import { DashboardLayout, TestPage } from "./components";
@@ -18,10 +18,10 @@ function App() {
             <Route path="/User" element={<User />} />
             <Route path="/Review" element={<Review />} />
             <Route path="/Office" element={<Office />}>
-              <Route index path="/Office/available-office" element={<div>test</div>} />
-              <Route path="/Office/booked-office" element={<div>test</div>} />
-              <Route path="/Office/office-list" element={<div>test</div>} />
-              <Route path="/Office/history-office" element={<div>test</div>} />
+              <Route index path="/Office/available-office" element={<OfficeAvailable />} />
+              <Route path="/Office/booked-office" element={<OfficeBooked />} />
+              <Route path="/Office/office-list" element={<OfficeList />} />
+              <Route path="/Office/history-office" element={<OfficeHistory />} />
             </Route>
           </Route>
           <Route path="/login" element={<Login />} />
