@@ -13,3 +13,6 @@ export {default as EntriesAndSearchComponent } from "./EntriesAndSearchComponent
 export {default as CardInfo} from "./Card/CardInfo";
 export {default as NavbarOffice} from "./NavbarOffice";
 export {default as CardChat} from "./Card/CardChat";
+export {default as InputTextField} from "./Input/InputTextField";
+export {default as InputTextArea} from "./Input/InputTextArea";
+export {default as InputSelect} from "./Input/InputSelect";
