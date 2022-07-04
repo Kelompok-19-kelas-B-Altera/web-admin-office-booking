@@ -2,7 +2,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 //Screen or Layout Web
-import { Login, Dashboard, User, Review } from "./screens";
+import { Login, Dashboard, User, Review, Chat } from "./screens";
 
 //Component
 import { DashboardLayout, TestPage } from "./components"
@@ -17,6 +17,7 @@ function App() {
             <Route index path="/:title" element={<TestPage />} />
             <Route index path="/User" element={<User />} />
             <Route index path="/Review" element={<Review />} />
+            <Route index path="/Chat" element={<Chat />} />
           </Route>
           <Route path="/login" element={<Login />} />
           <Route
