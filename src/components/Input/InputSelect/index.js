@@ -1,6 +1,6 @@
 import Select from 'react-select';
 
-const InputSelect = ({label, placeholder}) => {
+const InputSelect = ({label, placeholder, options, setChange}) => {
 
   const customStyles = {
     control: (base, state) => ({
@@ -21,18 +21,12 @@ const InputSelect = ({label, placeholder}) => {
     
   };
 
-  const options = [
-    { value: 'chocolate', label: 'Chocolate' },
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' },
-  ];
-
   return(
     <div className="flex flex-col gap-[6px] mb-3 w-full">
       <label className="text-[#070723] text-[14px] leading-4">{label}</label>
       <Select
         // defaultValue={selectedOption}
-        // onChange={setSelectedOption}
+        onChange={setChange}
         placeholder={placeholder}
         isSearchable={true}
         styles={customStyles}
