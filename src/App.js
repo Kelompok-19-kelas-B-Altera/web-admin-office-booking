@@ -2,11 +2,11 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 //Screen or Layout Web
-import { Login, Dashboard, User, Review, Office, OfficeAvailable, OfficeList, OfficeBooked, OfficeHistory } from "./screens";
+import { Login, Dashboard, User, Review, Office, OfficeAvailable, OfficeList, OfficeBooked, OfficeHistory, Chat } from "./screens";
 
 
 //Component
-import { DashboardLayout, TestPage } from "./components";
+import { DashboardLayout, TestPage, CardChat } from "./components";
 
 function App() {
   return (
@@ -15,7 +15,7 @@ function App() {
         <Routes>
           <Route element={<DashboardLayout />}>
             <Route index path="/" element={<Dashboard />} />
-            <Route index path="/:title" element={<TestPage />} />
+            <Route path="/Chat" element={<Chat />} />
             <Route path="/User" element={<User />} />
             <Route path="/Review" element={<Review />} />
             <Route path="/Office" element={<Office />}>
@@ -24,13 +24,12 @@ function App() {
               <Route path="/Office/office-list" element={<OfficeList />} />
               <Route path="/Office/history-office" element={<OfficeHistory />} />
             </Route>
-
           </Route>
           <Route path="/login" element={<Login />} />
           <Route
             path="*"
             element={
-              <div className="flex h-screen">
+              <div className="flex flex-col h-screen">
                 <p className="m-auto">There's nothing here: 404!</p>
               </div>
             }

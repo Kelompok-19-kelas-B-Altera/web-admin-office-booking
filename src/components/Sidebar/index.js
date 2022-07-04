@@ -20,7 +20,7 @@ const Sidebar = ({active}) => {
     },
     {
       img : "/sidebar/Office.svg",
-      imgActive : "/sidebar/Office.svg",
+      imgActive : "/sidebar/Office-Active.svg",
       title : "Office",
       link : "/Office",
       count : 0,
