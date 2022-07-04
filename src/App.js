@@ -6,7 +6,7 @@ import { Login, Dashboard, User, Review, Office, OfficeAvailable, OfficeList, Of
 
 
 //Component
-import { DashboardLayout, TestPage } from "./components";
+import { DashboardLayout, TestPage, CardChat } from "./components";
 
 function App() {
   return (
@@ -30,7 +30,7 @@ function App() {
           <Route
             path="*"
             element={
-              <div className="flex h-screen">
+              <div className="flex flex-col h-screen">
                 <p className="m-auto">There's nothing here: 404!</p>
               </div>
             }

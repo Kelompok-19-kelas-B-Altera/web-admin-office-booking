@@ -12,3 +12,4 @@ export {default as PaginationAndDescStatisticData } from "./PaginationAndDescSta
 export {default as EntriesAndSearchComponent } from "./EntriesAndSearchComponent";
 export {default as CardInfo} from "./Card/CardInfo";
 export {default as NavbarOffice} from "./NavbarOffice";
+export {default as CardChat} from "./Card/CardChat";
