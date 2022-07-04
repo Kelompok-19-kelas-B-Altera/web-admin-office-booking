@@ -11,3 +11,4 @@ export {default as ContentLayout } from "./ContentLayout"
 export {default as PaginationAndDescStatisticData } from "./PaginationAndDescStatisticData";
 export {default as EntriesAndSearchComponent } from "./EntriesAndSearchComponent";
 export {default as CardInfo} from "./Card/CardInfo";
+export {default as NavbarOffice} from "./NavbarOffice";
