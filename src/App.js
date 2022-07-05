@@ -2,11 +2,23 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 //Screen or Layout Web
-import { Login, Dashboard, User, Review, Office, OfficeAvailable, OfficeList, OfficeBooked, OfficeHistory, Chat } from "./screens";
+import { 
+  Login, 
+  Dashboard, 
+  User, 
+  Review, 
+  Office, 
+  OfficeAvailable, 
+  OfficeList, 
+  OfficeBooked, 
+  OfficeHistory, 
+  Chat,
+  AddOffice 
+} from "./screens";
 
 
 //Component
-import { DashboardLayout, TestPage, CardChat } from "./components";
+import { DashboardLayout } from "./components";
 
 function App() {
   return (
@@ -24,6 +36,7 @@ function App() {
               <Route path="/Office/office-list" element={<OfficeList />} />
               <Route path="/Office/history-office" element={<OfficeHistory />} />
             </Route>
+            <Route path="/Office/office-list/add-office" element={<AddOffice />} />
           </Route>
           <Route path="/login" element={<Login />} />
           <Route
