@@ -50,7 +50,7 @@ const EditOffice = () => {
         </div>
         <div className="flex justify-center mt-8">
           <button className="py-[17px] rounded bg-[#197BEB] w-[336px]" onClick={() => console.log("Ke Klik")}>
-            <p className="font-bold text-[14px] leading-4 text-white" style={{ fontStyle : "normal" }}>Tambah Kantor</p>
+            <p className="font-bold text-[14px] leading-4 text-white" style={{ fontStyle : "normal" }}>Simpan Kantor</p>
           </button>
         </div>
       </ContentContainer>
