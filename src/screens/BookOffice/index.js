@@ -37,13 +37,13 @@ const BookOffice = () => {
             <p className="text-[16px] leading-[18px] font-semibold mb-3 text-center">Tanggal Pemesanan</p>
             {/* <CustomCalender selectRange={false}/> */}
             <div className="flex gap-[15px]">
-              <div className="flex flex-col gap-[6px]">
+              <div className="flex flex-col gap-[6px] w-[250px]">
                 <InputDate date={date1} setDate={setDate1}/>
                 <InputDate date={date2} setDate={setDate2}/>
               </div>
-              <div className="flex flex-col">
-                <InputSelect placeholder={"Pilih Jam Mulai"} padding={'1px'}/>
-                <InputSelect placeholder={"Pilih Jam Mulai"} padding={'1px'}/>
+              <div className="flex flex-col w-[250px]">
+                <InputSelect placeholder={"Pilih Jam Mulai"} padding={'1px'} border={"#07072370"}/>
+                <InputSelect placeholder={"Pilih Jam Mulai"} padding={'1px'} border={"#07072370"}/>
               </div>
             </div>
 

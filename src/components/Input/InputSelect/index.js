@@ -1,13 +1,13 @@
 import Select from 'react-select';
 
-const InputSelect = ({label, placeholder, options, setChange, value, disable, padding}) => {
+const InputSelect = ({label, placeholder, options, setChange, value, disable, padding, border}) => {
 
   const customStyles = {
     control: (base, state) => ({
       ...base,
       background: disable ? "#F1F1F1" : "white",
       // Overwrittes the different states of border
-      borderColor: state.isFocused ? "#3A57E8" : "#F1F1F1",
+      borderColor: state.isFocused ? "#3A57E8" : border,
       // Removes weird border around container
       boxShadow: state.isFocused ? null : null,
       borderRadius :'4px',
@@ -39,7 +39,8 @@ const InputSelect = ({label, placeholder, options, setChange, value, disable, pa
 
 InputSelect.defaultProps = {
   disable : false,
-  padding : '4px'
+  padding : '4px',
+  border : '#F1F1F1'
 }
 
 export default InputSelect;

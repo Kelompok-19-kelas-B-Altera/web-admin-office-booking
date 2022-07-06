@@ -6,7 +6,7 @@ const InputDate = ({date, setDate}) => {
   
   return(
     <div className="relative mt-[6px] mb-[6px]">
-      <button className="flex justify-between rounded border border-[#070723]/50 bg-white border-[#F1F1F1] p-[10px] w-full" onClick={() => setShow(!show)}>
+      <button className="flex justify-between rounded border border-[#070723]/50 p-[10px] w-full" onClick={() => setShow(!show)}>
         {
           date === null ?  
           <p className="self-center text-[#070723]/50 font-normal text-[14px] leading-4">Pilih Tanggal Mulai</p>
