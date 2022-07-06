@@ -1,6 +1,56 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axiosInstance from "../../networks/apis";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  handleTotalData,
+  handleTotalPage,
+} from "../../utils/redux/features/entriesAndPaginateSlice";
+import Cookies from "js-cookie";
 
 const OfficeList = () => {
+  let [listBuildings, setListBuildings] = useState();
+  const entries = useSelector((state) => state.entriesAndPaginationSlice.entries);
+  const page = useSelector((state) => state.entriesAndPaginationSlice.page);
+  const inputSearch = useSelector((state) => state.entriesAndPaginationSlice.inputSearch);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    axiosInstance
+      .post("/api/v1/building/search", {
+        filters: [
+          {
+            key: "buildingName",
+            operator: "LIKE",
+            field_type: "STRING",
+            value: inputSearch,
+          },
+        ],
+        sorts: [],
+        page: page,
+        size: entries,
+      })
+      .then((res) => {
+        // console.log(res.data.data);
+        dispatch(handleTotalPage(res.data.data.totalPages));
+        dispatch(handleTotalData(res.data.data.totalElements));
+        setListBuildings(res.data.data.content);
+      });
+  }, [entries, page, listBuildings]);
+
+  const handleDelete = (e) => {
+    const id = Number(e.target.id);
+    axiosInstance
+      .delete(`/api/v1/building/${id}`, {
+        headers: { Authorization: "Bearer " + Cookies.get("token") },
+      })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <div className="p-[10px]">
       <div className="flex text-base font-semibold text-[#070723]">
@@ -11,22 +61,39 @@ const OfficeList = () => {
       </div>
 
       <div className="min-h-[308px]">
-        <div className="flex justify-self-auto text-base text-[#070723] mt-[12px]">
-          <p className="mr-[32px] w-[21px] my-auto text-center">1</p>
-          <div className="flex items-center w-[332px] mr-[32px] flex-1">
-            <img
-              src="/login/bg.svg"
-              alt="photo-profile"
-              className="w-[50px] h-[50px] rounded-full object-cover mr-[32px]"
-            />
-            <p className="w-[250px] capitalize">Contoh nama</p>
+        {listBuildings?.map((element, index) => (
+          <div
+            className="flex justify-self-auto text-base text-[#070723] mt-[12px]"
+            key={element.id}
+          >
+            <p className="mr-[32px] w-[21px] my-auto text-center">{index + 1}</p>
+            <div className="flex items-center w-[332px] mr-[32px] flex-1">
+              <img
+                src={element.images[0]?.image_url}
+                alt="photo-profile"
+                className="w-[50px] h-[50px] rounded-full object-cover mr-[32px]"
+              />
+              <p className="w-[250px] capitalize">{element.building_name}</p>
+            </div>
+            <p className="mr-[32px] w-[250px] my-auto capitalize flex-1">
+              {`${element.address}, ${element.complex.city}`}
+            </p>
+            <div className="flex gap-2 w-[200px] flex-1">
+              <button className="min-w-[180.5px] w-full h-[43px] bg-[#F3C319] rounded text-white">
+                Edit
+              </button>
+              <button
+                className="min-w-[180.5px] w-full h-[43px] bg-[#FF5958] rounded text-white"
+                id={element.id}
+                onClick={(e) => {
+                  handleDelete(e);
+                }}
+              >
+                Delete
+              </button>
+            </div>
           </div>
-          <p className="mr-[32px] w-[250px] my-auto capitalize flex-1">Cilandak, Jakarta Selatan</p>
-          <div className="flex gap-2 w-[200px] flex-1">
-            <button className="min-w-[180.5px] w-full h-[43px] bg-[#F3C319] rounded text-white">Edit</button>
-            <button className="min-w-[180.5px] w-full h-[43px] bg-[#FF5958] rounded text-white">Delete</button>
-          </div>
-        </div>
+        ))}
       </div>
     </div>
   );
