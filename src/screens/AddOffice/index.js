@@ -61,8 +61,6 @@ const AddOffice = () => {
     }
   }
 
-  console.log(images)
-
   return(
     <ContentLayout>
       <ContentHeader title={"Tambah Kantor"}/>
@@ -73,8 +71,8 @@ const AddOffice = () => {
             <p className="text-[16px] leading-[18px] font-semibold mb-3">Fasilitas Terdekat</p>
             <InputTextField label={"Nama *"} value={nama} name={"name"} placeholder={"Masukan Nama Kantor"} setChange={(e) => setNama(e.target.value)}/>
             <InputTextArea label={"Deskripsi *"} value={desc} name={"desc"} placeholder={"Kantor ini nyaman dan sangat murah dan berkualitas.."} setChange={(e) => setDesc(e.target.value)}/>
-            <InputSelect label={"Lokasi *"} placeholder="Pilih Lokasi" options={options} setChange={(e) => setLokasi(e.value)}/>
-            <InputSelect label={"Kemacatan *"} placeholder="Pilih Kecamatan" options={options} setChange={(e) => setKecamatan(e.value)}/>
+            <InputSelect value={lokasi} label={"Lokasi *"} placeholder="Pilih Lokasi" options={options} setChange={(e) => setLokasi(e.value)}/>
+            <InputSelect value={Kecamatan} label={"Kemacatan *"} placeholder="Pilih Kecamatan" options={options} setChange={(e) => setKecamatan(e.value)}/>
           </div>
           {/* Right Side */}
           <div className="w-1/2">
@@ -84,7 +82,7 @@ const AddOffice = () => {
               fasilTerdekat.map((data, index) => ( 
               <div key={index} className="flex justify-around gap-[10px]">
                 <InputTextField name={"name"} placeholder={"ex. Bandara Depati Amir"} value={data.name} setChange={(e) => handleFasilChange(index, "name", e.target.value)}/>
-                <InputSelect placeholder={"Pilih Kategori"} options={options} setChange={(e) => handleFasilChange(index, "kategori", e.value)}/>
+                <InputSelect value={data.kategori} placeholder={"Pilih Kategori"} options={options} setChange={(e) => handleFasilChange(index, "kategori", e.value)}/>
                 <div className="w-[120px]">
                   <InputTextField name={"jarak"} placeholder={"KM"} value={data.jarak} setChange={(e) => handleFasilChange(index, "jarak", e.target.value)}/>
                 </div>
@@ -121,7 +119,7 @@ const AddOffice = () => {
           </div>
         </div>
         <div className="flex justify-center mt-8">
-          <button className="py-[17px] rounded bg-[#197BEB] w-[336px]">
+          <button className="py-[17px] rounded bg-[#197BEB] w-[336px]" onClick={() => console.log(lokasi)}>
             <p className="font-bold text-[14px] leading-4 text-white" style={{ fontStyle : "normal" }}>Tambah Kantor</p>
           </button>
         </div>

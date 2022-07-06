@@ -13,7 +13,8 @@ import {
   OfficeBooked, 
   OfficeHistory, 
   Chat,
-  AddOffice 
+  AddOffice,
+  BookOffice 
 } from "./screens";
 
 
@@ -37,6 +38,7 @@ function App() {
               <Route path="/Office/history-office" element={<OfficeHistory />} />
             </Route>
             <Route path="/Office/office-list/add-office" element={<AddOffice />} />
+            <Route path="/Office/available-office/book-office" element={<BookOffice />} />
           </Route>
           <Route path="/login" element={<Login />} />
           <Route
