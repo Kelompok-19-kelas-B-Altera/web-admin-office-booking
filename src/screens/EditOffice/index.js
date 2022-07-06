@@ -10,10 +10,9 @@ import {
   CustomCalender
 } from "../../components";
 
-const BookOffice = () => {
+const EditOffice = () => {
   const [date1, setDate1] = useState(null);
   const [date2, setDate2] = useState(null);
-  // console.log(date)
 
   return(
     <ContentLayout>
@@ -38,12 +37,12 @@ const BookOffice = () => {
             {/* <CustomCalender selectRange={false}/> */}
             <div className="flex gap-[15px]">
               <div className="flex flex-col gap-[6px] w-[250px]">
-                <InputDate date={date1} setDate={setDate1}/>
-                <InputDate date={date2} setDate={setDate2}/>
+                <InputDate date={date1} setDate={setDate1} disable={true}/>
+                <InputDate date={date2} setDate={setDate2} disable={true}/>
               </div>
               <div className="flex flex-col w-[250px]">
-                <InputSelect placeholder={"Pilih Jam Mulai"} padding={'1px'} border={"#07072370"}/>
-                <InputSelect placeholder={"Pilih Jam Mulai"} padding={'1px'} border={"#07072370"}/>
+                <InputSelect placeholder={"Pilih Jam Mulai"} padding={'1px'} border={"#07072370"} disable={true}/>
+                <InputSelect placeholder={"Pilih Jam Mulai"} padding={'1px'} border={"#07072370"} disable={true}/>
               </div>
             </div>
 
@@ -59,4 +58,4 @@ const BookOffice = () => {
   )
 }
 
-export default BookOffice; 
+export default EditOffice;
