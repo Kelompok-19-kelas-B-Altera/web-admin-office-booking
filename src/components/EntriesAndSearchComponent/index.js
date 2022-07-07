@@ -19,7 +19,7 @@ const EntriesAndSearchComponent = ({ handleEntries, handleButtonSearch }) => {
             ref={ref}
             defaultValue={5}
             onChange={(e) => {
-              handleEntries(e);
+              handleEntries(e.target.value);
             }}
             className="relative z-10 appearance-none w-[49px] h-[28px] bg-transparent border border-[#f1f1f1] rounded px-[10px] focus:outline-1 focus:outline-[#f1f1f1] focus:border"
           >

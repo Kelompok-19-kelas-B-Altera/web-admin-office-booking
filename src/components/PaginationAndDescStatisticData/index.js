@@ -11,7 +11,7 @@ const PaginationAndDescStatisticData = ({ showingFrom, showingTo, amountAllEntri
       <ReactPaginate
         nextLabel="Next"
         onPageChange={(e) => {
-          handlePagination(e);
+          handlePagination(e.selected);
         }}
         pageRangeDisplayed={4}
         marginPagesDisplayed={1}
