@@ -9,6 +9,7 @@ import Cookies from "js-cookie";
 
 const OfficeList = () => {
   let [listBuildings, setListBuildings] = useState();
+  const [triggerRequestOnDelete, setTriggerRequestOnDelete] = useState(false)
   const entries = useSelector((state) => state.entriesAndPaginationSlice.entries);
   const page = useSelector((state) => state.entriesAndPaginationSlice.page);
   const inputSearch = useSelector((state) => state.entriesAndPaginationSlice.inputSearch);
@@ -35,7 +36,8 @@ const OfficeList = () => {
         dispatch(handleTotalData(res.data.data.totalElements));
         setListBuildings(res.data.data.content);
       });
-  }, [entries, page, listBuildings]);
+      console.log("triggered")
+  }, [entries, page, triggerRequestOnDelete]);
 
   const handleDelete = (e) => {
     const id = Number(e.target.id);
@@ -45,6 +47,7 @@ const OfficeList = () => {
       })
       .then((res) => {
         console.log(res);
+        setTriggerRequestOnDelete(!triggerRequestOnDelete)
       })
       .catch((err) => {
         console.log(err);
