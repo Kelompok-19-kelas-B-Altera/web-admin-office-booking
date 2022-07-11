@@ -105,7 +105,7 @@ const User = () => {
           <div className="min-h-[308px] overflow-auto">
             {users?.map((e, index) => {
               return (
-                <div className="flex justify-self-auto text-base text-[#070723] mt-[12px]">
+                <div className="flex justify-self-auto items-center text-base text-[#070723] mt-[12px]">
                   <p className="mr-[32px] w-[21px] text-center">{index + 1}</p>
                   <img
                     src={e.pic_url}
