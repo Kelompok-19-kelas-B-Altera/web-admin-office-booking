@@ -23,7 +23,7 @@ const OfficeAvailable = () => {
           </div>
           <p className="mr-[32px] w-[250px] my-auto capitalize flex-1">Cilandak, Jakarta Selatan</p>
           <div className="flex gap-2 w-[200px] flex-1">
-            <button className="min-w-[369px] w-full h-[43px] bg-[#197beb] rounded text-white">Delete</button>
+            <button className="min-w-[369px] w-full h-[43px] bg-[#197beb] rounded text-white">Pesan</button>
           </div>
         </div>
       </div>
