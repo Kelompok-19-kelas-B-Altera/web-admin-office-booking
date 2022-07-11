@@ -12,5 +12,6 @@ export {default as OfficeHistory} from "./Office/OfficeHistory"
 export {default as Chat} from "./Chat"
 export {default as AddOffice} from "./AddOffice"
 export {default as BookOffice} from "./BookOffice"
-export {default as EditOffice} from "./EditOffice"
+export {default as EditBookedOffice} from "./EditOffice/EditBookedOffice"
+export {default as EditOffice} from "./EditOffice/EditOffice"
 

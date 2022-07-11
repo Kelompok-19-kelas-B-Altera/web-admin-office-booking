@@ -15,6 +15,7 @@ import {
   Chat,
   AddOffice,
   BookOffice, 
+  EditBookedOffice,
   EditOffice
 } from "./screens";
 
@@ -38,9 +39,11 @@ function App() {
               <Route path="/Office/office-list" element={<OfficeList />} />
               <Route path="/Office/history-office" element={<OfficeHistory />} />
             </Route>
-            <Route path="/Office/office-list/add-office" element={<AddOffice />} />
+            <Route path="/Office/available-office/add-office" element={<AddOffice />} />
             <Route path="/Office/available-office/book-office" element={<BookOffice />} />
-            <Route path="/Office/booked-office/edit-office" element={<EditOffice />} />
+            <Route path="/Office/booked-office/edit-office" element={<EditBookedOffice />} />
+            <Route path="/Office/office-list/edit-office" element={<EditOffice />} />
+
           </Route>
           <Route path="/login" element={<Login />} />
           <Route

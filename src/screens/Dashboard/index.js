@@ -1,14 +1,24 @@
 import { ContentHeader, ContentLayout, CardInfo, CardChat } from "../../components";
+import { useEffect } from "react";
+import Cookies from 'js-cookie';
+import { useNavigate } from "react-router-dom";
 
 const HomeDashboard = () => {
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if(Cookies.get("token") === undefined){
+      navigate("/login")
+    }
+  })
   return(
     <ContentLayout>
       <ContentHeader/>
       <div className="flex justify-between gap-10">
         <CardInfo title={"Total Office"} color={"#4CAF50"} count={"210"} logo={"Homes.svg"}/>
-        <CardInfo title={"Total Office"} color={"#FF5958"} count={"192"} logo={"Avali.svg"}/>
-        <CardInfo title={"Total Office"} color={"#FCAB4A"} count={"28"} logo={"Book.svg"}/>
-        <CardInfo title={"Total Office"} color={"#197BEB"} count={"1021"} logo={"Users.svg"}/>
+        <CardInfo title={"Available"} color={"#FF5958"} count={"192"} logo={"Avali.svg"}/>
+        <CardInfo title={"Booked"} color={"#FCAB4A"} count={"28"} logo={"Book.svg"}/>
+        <CardInfo title={"User"} color={"#197BEB"} count={"1021"} logo={"Users.svg"}/>
       </div>
       <div className="w-[86vh] mt-8">
         <h5 className="font-semibold text-[24px] leading-[28px] mb-6">Obrolan Terbaru</h5>
