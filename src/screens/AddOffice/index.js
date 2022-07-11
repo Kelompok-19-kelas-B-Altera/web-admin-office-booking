@@ -81,7 +81,7 @@ const AddOffice = () => {
     console.log("fasil terdekat",fasilTerdekat)
     console.log("list image",images)
     console.log(nama, desc, alamat, lokasi)
-    // postData()
+    postData()
   }
 
   const postData = () => {
