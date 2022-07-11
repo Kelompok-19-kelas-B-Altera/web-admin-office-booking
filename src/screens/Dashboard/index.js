@@ -1,6 +1,16 @@
 import { ContentHeader, ContentLayout, CardInfo, CardChat } from "../../components";
+import { useEffect } from "react";
+import Cookies from 'js-cookie';
+import { useNavigate } from "react-router-dom";
 
 const HomeDashboard = () => {
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if(Cookies.get("token") === undefined){
+      navigate("/login")
+    }
+  })
   return(
     <ContentLayout>
       <ContentHeader/>

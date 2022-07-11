@@ -25,6 +25,12 @@ const Login = () => {
 		}
 	}, [isUserExist]);
 
+	useEffect(() => {
+		if (Cookies.get("token")){
+			router('/')
+		}
+	})
+
 	const handleEmail = (e) => {
 		const value = e.target.value;
 		const valueWithNoSpace = value.includes(' ') ? false : true;
