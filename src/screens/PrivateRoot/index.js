@@ -7,7 +7,7 @@ const PrivateRoot = () => {
   const navigate = useNavigate();
   
   useEffect(() => {
-    token ? navigate("/") : navigate("/login");
+    !token && navigate("/login");
   }, []);
 
   return <Outlet />;
