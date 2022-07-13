@@ -52,7 +52,6 @@ const BookOffice = () => {
           'Authorization' : `Bearer ${Cookies.get("token")}`,
         }
       }).then((res) => {
-        // console.log(res.data.data.slice(1, res.data.data.length))
         const temp = res.data.data.slice(1, res.data.data.length).map((data) => {
           return {
             label : data.fullname,
