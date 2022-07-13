@@ -13,7 +13,7 @@ const InputDate = ({date, setDate, disable}) => {
           date === null ?  
           <p className="self-center text-[#070723]/50 font-normal text-[14px] leading-4">Pilih Tanggal Mulai</p>
           :
-          <p className="self-center text-[#070723]/50 font-normal text-[14px] leading-4">{date.toDateString()}</p>
+          <p className="self-center font-normal text-[14px] leading-4">{date.toDateString()}</p>
         }
         <img src="/calender/ic_baseline-date-range.svg" alt="logo" className="self-center"/>
       </button>

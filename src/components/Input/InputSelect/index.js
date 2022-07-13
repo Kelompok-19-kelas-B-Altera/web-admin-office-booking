@@ -1,6 +1,6 @@
 import Select from 'react-select';
 
-const InputSelect = ({label, placeholder, options, setChange, value, disable, padding, border}) => {
+const InputSelect = ({label, placeholder, options, setChange, value, disable, padding, border, optionsDisable}) => {
 
   const customStyles = {
     control: (base, state) => ({
@@ -32,6 +32,7 @@ const InputSelect = ({label, placeholder, options, setChange, value, disable, pa
         styles={customStyles}
         options={options}
         isDisabled={disable}
+        isOptionDisabled={optionsDisable}
       />
     </div>
   )
