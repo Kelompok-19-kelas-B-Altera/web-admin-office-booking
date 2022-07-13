@@ -10,9 +10,17 @@ import {
   CustomCalender
 } from "../../components";
 
-const EditOffice = () => {
+const EditBookedOffice = () => {
+  const options = [
+    {label : "Lunas", value : "Lunas"},
+    {label : "DP", value : "DP"},
+  ]
+
+  const [option, setoption] = useState({label : "Lunas", value : "Lunas"});
   const [date1, setDate1] = useState(null);
   const [date2, setDate2] = useState(null);
+  const [nama, setNama] = useState("Zananda Aditya");
+  const [noHP, setNoHP] = useState("019283120421");  
 
   return(
     <ContentLayout>
@@ -22,13 +30,13 @@ const EditOffice = () => {
           
           <div className="w-1/2 flex flex-col gap-3">
             <InputTextField label={"Nama"} disable={true} value={"Ini Hanya Dummy"}/>
-            <InputSelect label={"Nama"} disable={true} placeholder={"Ini Hanya Dummy"}/>
-            <InputSelect label={"Nama"} disable={true} placeholder={"Ini Hanya Dummy"}/>
+            <InputSelect label={"Alamat"} disable={true} placeholder={"Ini Hanya Dummy"}/>
+            <InputSelect label={"Lokasi"} disable={true} placeholder={"Ini Hanya Dummy"}/>
           </div>
           <div className="w-1/2 flex flex-col gap-3">
-            <InputTextField label={"Nama Pemesan"} placeholder={"Masukkan nama pemesan"}/>
-            <InputTextField label={"Nomor Telepon"} placeholder={"Masukkan nomor telepon"}/>
-            <InputSelect label={"Status Pembayaran"} placeholder={"Pilih Status"}/>
+            <InputTextField label={"Nama Pemesan"} value={nama} setChange={(e) => setNama(e.target.value)} placeholder={"Masukkan nama pemesan"}/>
+            <InputTextField label={"Nomor Telepon"} value={noHP} setChange={(e) => setNoHP(e.target.value)} placeholder={"Masukkan nomor telepon"}/>
+            <InputSelect value={option} setChange={setoption} options={options} label={"Status Pembayaran"} placeholder={"Pilih Status"}/>
           </div>
         </div>
         <div className="flex justify-center mt-8">
@@ -58,4 +66,4 @@ const EditOffice = () => {
   )
 }
 
-export default EditOffice;
+export default EditBookedOffice;

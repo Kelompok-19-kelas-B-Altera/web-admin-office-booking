@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import axiosInstance from "../../networks/apis";
 import Cookies from 'js-cookie';
 
-const AddOffice = () => {
+const EditOffice = () => {
   const optionsFasil = [
     { value : 'Transportasi', label: 'Transportasi'},
     { value : 'Layanan', label: 'Layanan'},
@@ -66,140 +66,13 @@ const AddOffice = () => {
   }
 
   const handleImages = (e) => {
-    // console.log(e.target.files)
+  
     if (e.target.files[0] !== undefined ){
       var temp = [...images]
       Array.from(e.target.files).forEach(file => {
         temp.push(file)
       });
       setImages(temp)
-    }
-    e.target.value = null
-  }
-
-  const temp = () => {
-    console.log("fasil terdekat",fasilTerdekat)
-    console.log("list image",images)
-    console.log(nama, desc, alamat, lokasi)
-    postData()
-  }
-
-  const postData = () => {
-    var id_building = 0
-    var id_facility = 0
-    axiosInstance
-      .post("/api/v1/building", 
-      { 
-        "building_name":nama,
-        "description":desc,
-        "total_room":0,
-        "room_space":0,
-        "address":alamat,
-        "id_complex":lokasi
-      }, 
-      {
-        headers : {
-          'Authorization' : `Bearer ${Cookies.get("token")}`
-        }
-      })
-      .then((res) => {
-        console.log(res)
-        id_building = res.data.data.id
-        fasilTerdekat.map((data) => {
-          if(data.name.length !== 0 || data.kategori.length !== 0 || data.jarak.length !== 0){
-            axiosInstance
-          .post("/api/v1/facility", 
-          {
-            "name":data.name,
-            "type":data.kategori 
-          },
-          {
-            headers : {
-              'Authorization' : `Bearer ${Cookies.get("token")}`
-            }
-          })
-          .then((res) => {
-            console.log(res.data.data.id)
-            id_facility = res.data.data.id
-            axiosInstance
-            .post("/api/v1/nearby",   
-            {
-              "id_building":id_building,
-              "id_facility":id_facility,
-              "distance": parseInt(data.jarak)
-            },
-            {
-              headers : {
-                'Authorization' : `Bearer ${Cookies.get("token")}`
-              }
-            })
-            .then((res) => {
-              console.log(res)
-            })
-            .catch((e) => {
-              console.log(e)
-            })
-          })
-          .catch((e) => {
-            console.log(e)
-          })
-          }
-        })
-        images.map((data) => {
-          const formData = new FormData();
-          formData.append('id_building', id_building);
-          formData.append('file', data)
-          // console.log(formData)
-          axiosInstance({
-            method: "post",
-            url: "/api/v1/building/image",
-            data: formData,
-            headers: { 
-              'Authorization' : `Bearer ${Cookies.get("token")}`,
-              "Content-Type": "multipart/form-data" 
-            },
-          }).then((res) => {
-            console.log(res)
-          }).catch((e) => {
-            console.log(e)
-          })
-        })
-      })
-      .catch((e) => {
-        console.log(e)
-      })
-  }
-
-  const dummyPostData = () => {
-    var id_building, id_facility = 0
-    var respone = {
-      "nama" : nama,
-      "desc" : desc,
-      "alamat" : alamat,
-      "lokasi" : lokasi,
-    }
-    console.log(respone)
-    if (Object.keys(respone).length !== 0){
-      id_building = 1
-      var fasil = []
-      var image = []
-      fasil = fasilTerdekat.map((data, index) =>{
-        return {
-          id : index,
-          name : data.name,
-          kategori : data.kategori,
-          jarak : data.jarak,
-        }
-      })
-
-      image = images.map((data, index) => {
-        return {
-          id : index,
-          imagesName : data.name 
-        }
-      })
-      fasil.map((data) => console.log(data))
-      image.map((data) => console.log(data))
     }
   }
 
@@ -292,7 +165,7 @@ const AddOffice = () => {
           : ""
         }
         <div className="flex justify-center mt-8">
-          <button className="py-[17px] rounded bg-[#197BEB] w-[336px]" onClick={() => temp()}>
+          <button className="py-[17px] rounded bg-[#197BEB] w-[336px]" onClick={() => console.log("test")}>
             <p className="font-bold text-[14px] leading-4 text-white" style={{ fontStyle : "normal" }}>Tambah Kantor</p>
           </button>
         </div>
@@ -301,4 +174,4 @@ const AddOffice = () => {
   )
 }
 
-export default AddOffice;
+export default EditOffice;
