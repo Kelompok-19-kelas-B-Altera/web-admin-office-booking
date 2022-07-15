@@ -26,9 +26,12 @@ const BookOffice = () => {
   const [option, setoption] = useState(null);
   const [date1, setDate1] = useState(null);
   const [date2, setDate2] = useState(null);
-  const [nama, setNama] = useState("");
-  const [noHP, setNoHP] = useState("");
+  const [nama, setNama] = useState(null);
+  const [noHP, setNoHP] = useState(null);
   const [optionName, setOptionsName] = useState([])
+  const [buttonActive, setButtonActive] = useState(false)
+  const [timeOne, setTimeOne] = useState(null);
+  const [timeTwo, setTimeTwo] = useState(null);
   
 
   const optionTime = () => {
@@ -37,7 +40,7 @@ const BookOffice = () => {
     for (var i = 0; i < 25; i++){
       i < 10 ? jam =  "0" + i : jam = i 
       temp.push(
-        {label : jam + ":00:00", value : jam},
+        {label : jam + ":00:00", value : jam.toString()},
       )
     }
     return temp
@@ -64,23 +67,25 @@ const BookOffice = () => {
       })
   }, [])
 
-  const handleTimeChange = (date, value) => {
+  const handleTimeChange = (date, value, setTime) => {
     try {
       date.setHours(value)
       date.setMinutes(0)
       date.setSeconds(0)
+      setTime(time[value])
     } catch (e) {
       // console.log(e)
     } 
   }
 
   const Booking = () => {
-
+    
     var firstDate = date1.toLocaleDateString("en-GB", timeSetting).replace(/,/g, '')
     firstDate = firstDate.replaceAll('/', '-')
     var secondDate = date2.toLocaleDateString("en-GB", timeSetting).replace(/,/g, '')
     secondDate = secondDate.replaceAll('/', '-')
-
+    
+    console.log(firstDate, secondDate)
 
     axiosInstance
       .post("/api/v1/schedule",{ 
@@ -120,13 +125,69 @@ const BookOffice = () => {
       })
   }
 
-  const conditionalFirstDate = (date) => {
-    return date1.toLocaleDateString() === new Date(Date.now()).toLocaleDateString() ? new Date(Date.now()).getHours() : ""
+  const conditionalFirstDate = () => {
+    if(date1 !== null){
+      return date1.toLocaleDateString() === new Date(Date.now()).toLocaleDateString() ? new Date(Date.now()).getHours() : ""
+    } else {
+      return 25
+    }
   }
 
   const conditionalSecondDate = () => {
-    return date1.toLocaleDateString() === date2.toLocaleDateString() ? date1.getHours() : ""
+    if(date1 !== null){
+      return date1.toLocaleDateString() === date2.toLocaleDateString() ? date1.getHours() : ""
+    } else if (date2 === null){
+      return 25
+    } else if (date2.toLocaleDateString() === new Date(Date.now()).toLocaleDateString()) {
+      return new Date(Date.now()).getHours() + 1
+    }
   }
+
+  useEffect(() => {
+    if(date1 !== null){
+      if(date1.toLocaleDateString() === new Date(Date.now()).toLocaleDateString() ){
+        setTimeOne({
+          label : date1.getHours() < 10 ? "0" + (date1.getHours()+1).toString() + ":00:00" : (date1.getHours()+1).toString() + ":00:00",
+          value : (date1.getHours()+1).toString()
+        })
+        date1.setHours(date1.getHours()+1)
+        date1.setMinutes(0)
+        date1.setSeconds(0)
+      }
+    }
+  }, [date1])
+
+  useEffect(() => {
+    if(date2 !== null && date1 !== null){
+      if (date1.toLocaleDateString() === date2.toLocaleDateString()){
+        setTimeTwo({
+          label : date2.getHours() < 10 ? "0" + (date2.getHours()+2).toString() + ":00:00" : (date2.getHours()+2).toString() + ":00:00",
+          value : (date2.getHours()+2).toString()
+        })
+        date2.setHours(date2.getHours()+2)
+        date2.setMinutes(0)
+        date2.setSeconds(0)
+      } else {
+        setTimeTwo({
+          label : (date2.getHours()).toString() + ":00:00"
+        })
+        date2.setHours(date2.getHours())
+        date2.setMinutes(0)
+        date2.setSeconds(0)
+      }
+      date2.setMinutes(0)
+      date2.setSeconds(0)
+    }
+  }, [date2])
+
+  useEffect(() => {
+    if(date1 !== null && date2 !== null && noHP !== null && noHP.length >= 12 && option !== null && nama !== null && timeOne !== null & timeTwo !== null){
+      setButtonActive(true)
+    } else {
+      setButtonActive(false)
+    }
+  }, [nama, noHP, option, date1 , date2, timeOne, timeTwo])
+
 
   return(
     <ContentLayout>
@@ -157,15 +218,15 @@ const BookOffice = () => {
                 <InputDate date={date2} setDate={setDate2}/>
               </div>
               <div className="flex flex-col w-[250px]">
-                <InputSelect placeholder={"Pilih Jam Mulai"} optionsDisable={(option) => option.value <= conditionalFirstDate()} setChange={(e) => handleTimeChange(date1, e.value)} options={time} padding={'1px'} border={"#07072370"}/>
-                <InputSelect placeholder={"Pilih Jam Mulai"} optionsDisable={(option) => option.value <= conditionalSecondDate()} setChange={(e) => handleTimeChange(date2, e.value)} options={time} padding={'1px'} border={"#07072370"}/>
+                <InputSelect value={timeOne} placeholder={"Pilih Jam Mulai"} optionsDisable={(option) => option.value <= conditionalFirstDate()} setChange={(e) => handleTimeChange(date1, e.value, setTimeOne)} options={time} padding={'1px'} border={"#07072370"}/>
+                <InputSelect value={timeTwo} placeholder={"Pilih Jam Mulai"} optionsDisable={(option) => option.value <= conditionalSecondDate()} setChange={(e) => handleTimeChange(date2, e.value, setTimeTwo)} options={time} padding={'1px'} border={"#07072370"}/>
               </div>
             </div>
 
           </div>
         </div>
         <div className="flex justify-center mt-8">
-          <button className="py-[17px] rounded bg-[#197BEB] w-[336px]" onClick={() => {Booking()}}>
+          <button className={`py-[17px] rounded ${buttonActive ? "bg-[#197BEB]" : "bg-[#197BEB]/50"}  w-[336px]`} disabled={buttonActive} onClick={() => {Booking()}}>
             <p className="font-bold text-[14px] leading-4 text-white" style={{ fontStyle : "normal" }}>Pesan Kantor</p>
           </button>
         </div>
