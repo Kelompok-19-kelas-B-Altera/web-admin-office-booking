@@ -33,7 +33,7 @@ const AddOffice = () => {
   const [images, setImages] = useState([])
   const [nama, setNama] = useState("")
   const [desc, setDesc] = useState("")
-  const [lokasi, setLokasi] = useState("")
+  const [lokasi, setLokasi] = useState(null)
   const [alamat, setAlamat] = useState("")
   const [error, setError] = useState([])
 
@@ -41,7 +41,7 @@ const AddOffice = () => {
     var temp = [...fasilTerdekat]
     temp.push({
       name : "",
-      kategori : "",
+      kategori : {},
       jarak : "",
     })
     setfasilTerdekat(temp)
@@ -61,7 +61,13 @@ const AddOffice = () => {
 
   const handleFasilChange = (index, name, value) => {
     var temp = [...fasilTerdekat]
-    temp[index][name] = value
+    if (name === "kategori"){
+      temp[index][name] = {
+        label : value, value : value
+      }
+    } else {
+      temp[index][name] = value
+    }
     setfasilTerdekat(temp)
   }
 
@@ -77,11 +83,19 @@ const AddOffice = () => {
     e.target.value = null
   }
 
-  const temp = () => {
-    console.log("fasil terdekat",fasilTerdekat)
-    console.log("list image",images)
-    console.log(nama, desc, alamat, lokasi)
-    postData()
+
+  const validasiInput = () => {
+    if (nama.length > 5 || desc.length > 5 || alamat.length > 5 || lokasi !== null){
+      return true
+    } else {
+      return false
+    }
+  }
+
+  const ValidationAndPost = () => {
+    if(validasiInput){
+      postData()
+    }
   }
 
   const postData = () => {
@@ -103,7 +117,6 @@ const AddOffice = () => {
         }
       })
       .then((res) => {
-        console.log(res)
         id_building = res.data.data.id
         fasilTerdekat.map((data) => {
           if(data.name.length !== 0 || data.kategori.length !== 0 || data.jarak.length !== 0){
@@ -170,39 +183,6 @@ const AddOffice = () => {
       })
   }
 
-  const dummyPostData = () => {
-    var id_building, id_facility = 0
-    var respone = {
-      "nama" : nama,
-      "desc" : desc,
-      "alamat" : alamat,
-      "lokasi" : lokasi,
-    }
-    console.log(respone)
-    if (Object.keys(respone).length !== 0){
-      id_building = 1
-      var fasil = []
-      var image = []
-      fasil = fasilTerdekat.map((data, index) =>{
-        return {
-          id : index,
-          name : data.name,
-          kategori : data.kategori,
-          jarak : data.jarak,
-        }
-      })
-
-      image = images.map((data, index) => {
-        return {
-          id : index,
-          imagesName : data.name 
-        }
-      })
-      fasil.map((data) => console.log(data))
-      image.map((data) => console.log(data))
-    }
-  }
-
   useEffect(() => {
     axiosInstance
       .get("/api/v1/complex")
@@ -223,6 +203,7 @@ const AddOffice = () => {
       })
   }, [])
 
+
   return(
     <ContentLayout>
       <ContentHeader title={"Tambah Kantor"}/>
@@ -234,7 +215,7 @@ const AddOffice = () => {
             <InputTextField label={"Nama *"} value={nama} name={"name"} placeholder={"Masukan Nama Kantor"} setChange={(e) => setNama(e.target.value)}/>
             <InputTextArea label={"Deskripsi *"} value={desc} name={"desc"} placeholder={"Kantor ini nyaman dan sangat murah dan berkualitas.."} setChange={(e) => setDesc(e.target.value)}/>
             <InputTextField label={"Alamat *"} value={alamat}  placeholder="Masukan Alamat" setChange={(e) => setAlamat(e.target.value)}/>
-            <InputSelect label={"Lokasi *"} value={lokasi}  placeholder="Pilih Lokasi" options={options} setChange={(e) => setLokasi(e.value)}/>
+            <InputSelect label={"Lokasi *"} value={lokasi}  placeholder="Pilih Lokasi" options={options} setChange={setLokasi}/>
           </div>
           {/* Right Side */}
           <div className="w-1/2">
@@ -292,7 +273,7 @@ const AddOffice = () => {
           : ""
         }
         <div className="flex justify-center mt-8">
-          <button className="py-[17px] rounded bg-[#197BEB] w-[336px]" onClick={() => temp()}>
+          <button className="py-[17px] rounded bg-[#197BEB] w-[336px]" onClick={() => ValidationAndPost()}>
             <p className="font-bold text-[14px] leading-4 text-white" style={{ fontStyle : "normal" }}>Tambah Kantor</p>
           </button>
         </div>
