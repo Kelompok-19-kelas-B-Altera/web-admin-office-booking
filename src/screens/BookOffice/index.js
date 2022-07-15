@@ -27,7 +27,7 @@ const BookOffice = () => {
   const [date1, setDate1] = useState(null);
   const [date2, setDate2] = useState(null);
   const [nama, setNama] = useState(null);
-  const [noHP, setNoHP] = useState(null);
+  const [noHP, setNoHP] = useState("");
   const [optionName, setOptionsName] = useState([])
   const [buttonActive, setButtonActive] = useState(false)
   const [timeOne, setTimeOne] = useState(null);
@@ -84,8 +84,6 @@ const BookOffice = () => {
     firstDate = firstDate.replaceAll('/', '-')
     var secondDate = date2.toLocaleDateString("en-GB", timeSetting).replace(/,/g, '')
     secondDate = secondDate.replaceAll('/', '-')
-    
-    console.log(firstDate, secondDate)
 
     axiosInstance
       .post("/api/v1/schedule",{ 
@@ -181,7 +179,7 @@ const BookOffice = () => {
   }, [date2])
 
   useEffect(() => {
-    if(date1 !== null && date2 !== null && noHP !== null && noHP.length >= 12 && option !== null && nama !== null && timeOne !== null & timeTwo !== null){
+    if(date1 !== null && date2 !== null && noHP.length >= 12 && option !== null && nama !== null && timeOne !== null & timeTwo !== null){
       setButtonActive(true)
     } else {
       setButtonActive(false)
@@ -226,7 +224,7 @@ const BookOffice = () => {
           </div>
         </div>
         <div className="flex justify-center mt-8">
-          <button className={`py-[17px] rounded ${buttonActive ? "bg-[#197BEB]" : "bg-[#197BEB]/50"}  w-[336px]`} disabled={buttonActive} onClick={() => {Booking()}}>
+          <button className={`py-[17px] rounded ${buttonActive ? "bg-[#197BEB]" : "bg-[#197BEB]/50"}  w-[336px]`} disabled={buttonActive ? false : true} onClick={() => {Booking()}}>
             <p className="font-bold text-[14px] leading-4 text-white" style={{ fontStyle : "normal" }}>Pesan Kantor</p>
           </button>
         </div>
