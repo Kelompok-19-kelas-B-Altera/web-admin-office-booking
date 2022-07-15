@@ -10,6 +10,7 @@ import {
 import { useEffect, useState } from "react";
 import axiosInstance from "../../networks/apis";
 import Cookies from 'js-cookie';
+import { useNavigate } from "react-router-dom";
 
 const AddOffice = () => {
   const optionsFasil = [
@@ -36,6 +37,8 @@ const AddOffice = () => {
   const [lokasi, setLokasi] = useState("")
   const [alamat, setAlamat] = useState("")
   const [error, setError] = useState([])
+  const [loading, setLoading] = useState(false)
+  const navigate = useNavigate()
 
   const handleTambahFasil = () => {
     var temp = [...fasilTerdekat]
@@ -81,6 +84,7 @@ const AddOffice = () => {
     console.log("fasil terdekat",fasilTerdekat)
     console.log("list image",images)
     console.log(nama, desc, alamat, lokasi)
+    setLoading(true)
     postData()
   }
 
@@ -135,13 +139,17 @@ const AddOffice = () => {
             })
             .then((res) => {
               console.log(res)
+              setLoading(false)
+              navigate("/Office/office-list")
             })
             .catch((e) => {
               console.log(e)
+              setLoading(false)
             })
           })
           .catch((e) => {
             console.log(e)
+            setLoading(false)
           })
           }
         })
@@ -167,6 +175,7 @@ const AddOffice = () => {
       })
       .catch((e) => {
         console.log(e)
+        setLoading(false)
       })
   }
 
@@ -292,9 +301,15 @@ const AddOffice = () => {
           : ""
         }
         <div className="flex justify-center mt-8">
+        {loading ? 
+          <button className="py-[17px] rounded bg-[#197BEB] w-[336px] opacity-50" disabled onClick={() => temp()}>
+            <p className="font-bold text-[14px] leading-4 text-white" style={{ fontStyle : "normal" }}>loading</p>
+          </button>
+          :
           <button className="py-[17px] rounded bg-[#197BEB] w-[336px]" onClick={() => temp()}>
             <p className="font-bold text-[14px] leading-4 text-white" style={{ fontStyle : "normal" }}>Tambah Kantor</p>
           </button>
+        }
         </div>
       </ContentContainer>
     </ContentLayout>
