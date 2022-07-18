@@ -33,6 +33,7 @@ const InputSelect = ({label, placeholder, options, setChange, value, disable, pa
         options={options}
         isDisabled={disable}
         isOptionDisabled={optionsDisable}
+        noOptionsMessage={() => "Data Kosong Atau Tidak Ditemukan"}
       />
     </div>
   )
