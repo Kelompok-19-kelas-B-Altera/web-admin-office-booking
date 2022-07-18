@@ -19,6 +19,7 @@ export const GET_ALL_CHAT_ROOM = gql`
       building {
         id
         name
+        address
         image
       }
       lastChat {
@@ -49,6 +50,7 @@ export const GET_CHAT_ROOM_USER_CONTAIN = gql`
       building {
         id
         name
+        address
         image
       }
       lastChat {
