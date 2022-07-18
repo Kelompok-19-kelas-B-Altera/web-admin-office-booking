@@ -14,6 +14,7 @@ import { useEffect } from "react";
 const Chat = () => {
   let [selected, setSelected] = useState(true);
   let [idChatRoom, setIdChatRoom] = useState(0);
+  let [idButton, setIdButton] = useState(0);
   let [idTarget, setidTarget] = useState(0);
   let [idBuilding, setIdBuilding] = useState(0);
   let [message, setMessage] = useState("");
@@ -37,8 +38,8 @@ const Chat = () => {
   const [sendMessage, { data: sendData, loading: sendLoading, error: sendError }] =
     useMutation(SEND_MESSAGE);
 
-  // console.log(chatRoomData);
-  // console.log(chatData);
+  console.log(chatRoomData);
+  console.log(chatData);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -63,11 +64,14 @@ const Chat = () => {
             <div key={e.id}>
               {/* box */}
               <div
-                className="flex gap-[17px] items-center p-[10px] text-[#1E1E1E] hover:cursor-pointer"
+                className={`flex gap-[17px] items-center p-[10px] text-[#1E1E1E] hover:cursor-pointer ${
+                  idButton === e.id && "bg-[#dbe5f0]"
+                }`}
                 onClick={() => {
                   setIdChatRoom(e.id);
                   setIdBuilding(e.building.id);
                   setidTarget(e.user2.id);
+                  setIdButton(e.id);
                   setDataBuilding({
                     name: e.building.name,
                     img_url: e.building.image,
@@ -139,7 +143,7 @@ const Chat = () => {
                           {/* User */}
                           <div className="flex gap-3 mb-2">
                             <img
-                              src="/login/bg.svg"
+                              src={e.sender.image}
                               alt="user"
                               className="w-[32px] h-[32px] rounded-full object-cover"
                             />
@@ -163,7 +167,7 @@ const Chat = () => {
                               <p className="text-sm">{e.message}</p>
                             </div>
                             <img
-                              src="/login/bg.svg"
+                              src={e.sender.image}
                               alt="admin"
                               className="w-[32px] h-[32px] rounded-full object-cover"
                             />
