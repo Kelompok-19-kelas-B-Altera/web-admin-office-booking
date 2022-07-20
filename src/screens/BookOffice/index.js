@@ -52,7 +52,7 @@ const BookOffice = () => {
       schedule = res.data.data.schedules.map((data) => {
         return {
           value : data.id,
-          label : "FROM : " + formatingDate(data.from_date) + " | TO : " + formatingDate(data.until_date)
+          label : formatingDate(data.from_date) + " | " + formatingDate(data.until_date)
         }
       })
       setoptions(schedule)
@@ -90,7 +90,6 @@ const BookOffice = () => {
     axiosInstance
       .post("/api/v1/booking" ,
       { 
-        "status":true,
         "id_user":nama.value,
         "id_schedule":selectedOption.value
       }, 
