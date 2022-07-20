@@ -39,6 +39,10 @@ const EditOffice = () => {
   const [lokasi, setLokasi] = useState("")
   const [alamat, setAlamat] = useState("")
   const [error, setError] = useState([])
+  const [TempDelete, setTempDelete] = useState({
+    fasilTerdekat : [],
+    images : [],
+  })
 
   const handleTambahFasil = () => {
     var temp = [...fasilTerdekat]
@@ -79,6 +83,13 @@ const EditOffice = () => {
     }
   }
 
+  const handleTempHapus = (index, section) => {
+    const temp = TempDelete
+    temp[section].push(index)
+    setTempDelete(temp)
+  }
+  
+
   useEffect(() => {
     axiosInstance
       .get("/api/v1/complex")
@@ -106,7 +117,7 @@ const EditOffice = () => {
           'Authorization' : `Bearer ${Cookies.get("token")}`
         }
       }).then((res) => {
-        console.log(res.data.data)
+        // console.log(res.data.data)
         setNama(res.data.data.building_name)
         setAlamat(res.data.data.address)
         setDesc(res.data.data.description)
@@ -133,7 +144,8 @@ const EditOffice = () => {
         console.log(e)
       })
   }, [])
-
+  
+  console.log(TempDelete)
 
   return(
     <ContentLayout>
@@ -160,7 +172,7 @@ const EditOffice = () => {
                   <div className="w-[120px]">
                     <InputTextField name={"jarak"} placeholder={"KM"} value={data.distance} setChange={(e) => handleFasilChange(index, "jarak", e.target.value)}/>
                   </div>
-                  <img src="/trash.svg" alt="trash.svg" className="h-[16px] w-[16px] self-center cursor-pointer" onClick={() => {handleHapusFasil(index)}}/>
+                  <img src="/trash.svg" alt="trash.svg" className="h-[16px] w-[16px] self-center cursor-pointer" onClick={() => handleTempHapus(data, "fasilTerdekat")}/>
                 </div>
               ))
             }
@@ -197,7 +209,7 @@ const EditOffice = () => {
                     <img src={data.image_url} className="h-[80px] w-[80px] object-cover"/>
                     <p className="self-center text-[14px] leading-4 font-normal">{data.image_url}</p>
                   </div>
-                  <img src="/trash.svg" alt="trash.svg" className="h-[16px] w-[16px] self-center cursor-pointer" onClick={() => handleHapusImages(index)}/>
+                  <img src="/trash.svg" alt="trash.svg" className="h-[16px] w-[16px] self-center cursor-pointer" onClick={() => handleTempHapus(data.id, "images")}/>
                 </div>
               ))
             }
@@ -228,7 +240,7 @@ const EditOffice = () => {
         }
         <div className="flex justify-center mt-8">
           <button className="py-[17px] rounded bg-[#197BEB] w-[336px]" onClick={() => console.log("test")}>
-            <p className="font-bold text-[14px] leading-4 text-white" style={{ fontStyle : "normal" }}>Tambah Kantor</p>
+            <p className="font-bold text-[14px] leading-4 text-white" style={{ fontStyle : "normal" }}>Simpan Perubahaan</p>
           </button>
         </div>
       </ContentContainer>

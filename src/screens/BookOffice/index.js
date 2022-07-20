@@ -4,9 +4,7 @@ import {
   ContentHeader,
   ContentLayout,
   InputTextField,
-  InputTextArea,
   InputSelect,
-  InputDate,
 } from "../../components";
 import axiosInstance from "../../networks/apis";
 import Cookies from 'js-cookie';
@@ -50,7 +48,6 @@ const BookOffice = () => {
     axiosInstance
     .get("/api/v1/building/" + buildingID)
     .then((res) => {
-      console.log(res.data.data)
       var schedule = []
       schedule = res.data.data.schedules.map((data) => {
         return {
