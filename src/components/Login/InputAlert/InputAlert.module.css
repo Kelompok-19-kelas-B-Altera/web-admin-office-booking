@@ -1,0 +1,24 @@
+.container {
+  display: flex;
+  align-items: center;
+  color: #ff5958;
+
+  gap: 2px;
+}
+
+.container p {
+  margin: 0;
+}
+
+.message {
+  font-size: 16px;
+}
+
+.messageMobile {
+  font-size: 8px;
+}
+
+.icon {
+  width: 19px;
+  height: 19px;
+}

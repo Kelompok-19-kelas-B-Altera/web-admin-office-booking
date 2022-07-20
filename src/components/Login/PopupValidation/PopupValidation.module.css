@@ -1,0 +1,45 @@
+.validationAlert {
+  max-width: 524px;
+  width: 100%;
+
+  background-color: #ff5958;
+  border-radius: 2px;
+
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 12px;
+
+  color: var(--color-white);
+
+  padding: 24px 0;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+
+  margin-top: 40px;
+}
+
+.validationAlert a {
+  color: var(--color-dark-blue);
+  font-weight: 600;
+}
+
+.validationAlertMobile {
+  max-width: 360px;
+  max-height: 36px;
+  width: 100%;
+  height: 100%;
+  background-color: #ff5958;
+
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 16px;
+  color: #ffffff;
+  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
