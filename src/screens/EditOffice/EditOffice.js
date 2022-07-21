@@ -10,8 +10,10 @@ import {
 import { useEffect, useState } from "react";
 import axiosInstance from "../../networks/apis";
 import Cookies from 'js-cookie';
+import { useParams } from "react-router-dom";
 
 const EditOffice = () => {
+  let { buildingID } = useParams();
   const optionsFasil = [
     { value : 'Transportasi', label: 'Transportasi'},
     { value : 'Layanan', label: 'Layanan'},
@@ -29,7 +31,8 @@ const EditOffice = () => {
       jarak : "",
     },
   ])
-
+  const [fasilTerdekatDB, setfasilTerdekatDB] = useState([])
+  const [imagesDB, setImagesDB] = useState([])
   const [images, setImages] = useState([])
   const [nama, setNama] = useState("")
   const [desc, setDesc] = useState("")
@@ -96,9 +99,45 @@ const EditOffice = () => {
       })
   }, [])
 
+  useEffect(() => {
+    axiosInstance
+      .get("/api/v1/building/" + buildingID, {
+        headers : {
+          'Authorization' : `Bearer ${Cookies.get("token")}`
+        }
+      }).then((res) => {
+        console.log(res.data.data)
+        setNama(res.data.data.building_name)
+        setAlamat(res.data.data.address)
+        setDesc(res.data.data.description)
+        setLokasi({
+          value : res.data.data.complex.id,
+          label : res.data.data.complex.city
+        })
+        var fasilDB = []
+        fasilDB = res.data.data.nearby_facilities.map((data) => {
+          return {
+            "id": data.id,
+            "name": data.name,
+            "type": {label : data.type, value : data.type},
+            "distance": data.distance
+          }
+        })
+        setfasilTerdekatDB(fasilDB)
+        var imageDB = []
+        imageDB = res.data.data.images.map((data) => {
+          return data
+        })
+        setImagesDB(imageDB)
+      }).catch((e) => {
+        console.log(e)
+      })
+  }, [])
+
+
   return(
     <ContentLayout>
-      <ContentHeader title={"Tambah Kantor"}/>
+      <ContentHeader title={"Edit Kantor"}/>
       <ContentContainer>
         <div className="flex justify-between gap-[120px]">
           {/* Left Side */}
@@ -113,6 +152,18 @@ const EditOffice = () => {
           <div className="w-1/2">
             <p className="text-[16px] leading-[18px] font-semibold  mb-3">Fasilitas Terdekat</p>
             {/* Fasilitas Terdekat */}
+            {
+              fasilTerdekatDB.map((data, index) => (
+                <div key={index} className="flex justify-around gap-[10px]">
+                  <InputTextField name={"name"} placeholder={"ex. Bandara Depati Amir"} value={data.name} setChange={(e) => handleFasilChange(index, "name", e.target.value)}/>
+                  <InputSelect value={data.type} placeholder={"Pilih Kategori"} options={optionsFasil} setChange={(e) => handleFasilChange(index, "kategori", e.value)}/>
+                  <div className="w-[120px]">
+                    <InputTextField name={"jarak"} placeholder={"KM"} value={data.distance} setChange={(e) => handleFasilChange(index, "jarak", e.target.value)}/>
+                  </div>
+                  <img src="/trash.svg" alt="trash.svg" className="h-[16px] w-[16px] self-center cursor-pointer" onClick={() => {handleHapusFasil(index)}}/>
+                </div>
+              ))
+            }
             {
               fasilTerdekat.map((data, index) => ( 
               <div key={index} className="flex justify-around gap-[10px]">
@@ -139,6 +190,17 @@ const EditOffice = () => {
             </button>
             <input type="file" id="file" className="hidden" accept="image/*" multiple onChange={(e) => {handleImages(e)}}/>
             {/* Preview Image */}
+            {
+              imagesDB.map((data, index) => (
+                <div key={index} className="flex justify-between mt-3 p-3" style={{ border: "1px dashed rgba(7, 7, 35, 0.5)" }}>
+                  <div className="flex gap-3">
+                    <img src={data.image_url} className="h-[80px] w-[80px] object-cover"/>
+                    <p className="self-center text-[14px] leading-4 font-normal">{data.image_url}</p>
+                  </div>
+                  <img src="/trash.svg" alt="trash.svg" className="h-[16px] w-[16px] self-center cursor-pointer" onClick={() => handleHapusImages(index)}/>
+                </div>
+              ))
+            }
             {
               images.map((data, index) => (
                 <div key={index} className="flex justify-between mt-3 p-3" style={{ border: "1px dashed rgba(7, 7, 35, 0.5)" }}>
