@@ -60,7 +60,7 @@ const AddOffice = () => {
   const [alamat, setAlamat] = useState("")
   const [error, setError] = useState([])
   const [loading, setLoading] = useState(false)
-  const [date, setDate] = useState([null])
+  // const [date, setDate] = useState([null])
   const navigate = useNavigate()
 
   const handleTambahFasil = () => {
@@ -168,7 +168,7 @@ const AddOffice = () => {
           .post("/api/v1/facility", 
           {
             "name":data.name,
-            "type":data.kategori 
+            "type":data.kategori.value 
           },
           {
             headers : {
@@ -251,7 +251,7 @@ const AddOffice = () => {
             
           }
           setLoading(false)
-          navigate("/Office/office-list")
+          // navigate("/Office/office-list")
         })
       })
       .catch((e) => {
@@ -290,7 +290,7 @@ const AddOffice = () => {
     })
   }
 
-  console.log(periode)
+  console.log(fasilTerdekat)
 
   
 
