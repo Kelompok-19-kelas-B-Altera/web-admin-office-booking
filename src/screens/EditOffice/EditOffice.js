@@ -11,9 +11,10 @@ import {
 import { useEffect, useState } from "react";
 import axiosInstance from "../../networks/apis";
 import Cookies from 'js-cookie';
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const EditOffice = () => {
+  let navigate = useNavigate()
   let { buildingID } = useParams();
   const optionsFasil = [
     { value : 'Transportasi', label: 'Transportasi'},
@@ -51,7 +52,9 @@ const EditOffice = () => {
       id : null,
       date : null,
       jamMulai : null,
-      jamAkhir : null
+      jamAkhir : null,
+      ready : null,
+      booked : null,
     }
   ])
   const [fasilTerdekatDB, setfasilTerdekatDB] = useState([])
@@ -118,7 +121,9 @@ const EditOffice = () => {
       id : null,
       date : null,
       jamMulai : null,
-      jamAkhir : null
+      jamAkhir : null,
+      ready : null,
+      booked : null,
     })
     setPeriode(newPeriode)
   }
@@ -146,7 +151,7 @@ const EditOffice = () => {
         setOptions(newOptions)
       })
       .catch((e) => {
-        console.log(e.message)
+        // console.log(e.message)
         var errorMsg = [...error]
         errorMsg.push("Lokasi Failed : " +e.message)
         setError(errorMsg)
@@ -180,13 +185,6 @@ const EditOffice = () => {
         setfasilTerdekatDB(fasilDB)
         var periodeDB = []
         periodeDB = res.data.data.schedules.map((data) => {
-          var temp = {
-            id : null,
-            date : null,
-            jamMulai : null,
-            jamAkhir : null
-          }
-
           var splitDate = []
           splitDate.push(data.from_date.split(" ", 2))
           splitDate.push(data.until_date.split(" ", 2))
@@ -203,7 +201,9 @@ const EditOffice = () => {
             id : data.id,
             date : newDate,
             jamMulai : optionsJam[parseInt(splitDate[0][1].split("-", 1))],
-            jamAkhir : optionsJam[parseInt(splitDate[1][1].split("-", 1))]
+            jamAkhir : optionsJam[parseInt(splitDate[1][1].split("-", 1))],
+            ready : data.ready,
+            booked : data.booked
           }
           
         })
@@ -214,13 +214,27 @@ const EditOffice = () => {
         })
         setImagesDB(imageDB)
       }).catch((e) => {
-        console.log(e)
+        // console.log(e.message)
+        var errorMsg = [...error]
+        errorMsg.push("Get Building Failed : " +e.message)
+        setError(errorMsg)
       })
   }, [])
+
+  const objectIsNotNull = (object) => {
+    return Object.values(object).every(value => {
+      if (value === null || value === "") {
+        return false
+      }
+    
+      return true
+    })
+  }
   
   const EditOffice = () => {
     var Update = []
     var Post = []
+    var tempError = [...error]
 
     Update = periode.filter((data) => {
       if (data.id !== null){
@@ -233,27 +247,214 @@ const EditOffice = () => {
         return data
       }
     })
-
-
     
-    console.log("Delete")
+    console.log("===== Delete =====")
     console.log(TempDelete)
+    // TempDelete.fasilTerdekat.map((data) => {
 
-    console.log("Update")
-    console.log(nama, desc, alamat, lokasi)
-    console.log(fasilTerdekatDB)
-    console.log(Update)
+    // })
+
+    TempDelete.images.map((data) => {
+      axiosInstance
+        .delete("/api/v1/building/image/" + data,{
+          headers : {
+            'Authorization' : `Bearer ${Cookies.get("token")}`
+          }
+        })
+        .then((res) => {
+          console.log(res.message)
+        })
+        .catch((e) => {
+          tempError.push("Delete Image " + data + " Failed : " +e.message)
+        })
+    })
+
+    TempDelete.periode.map((data) => {
+      axiosInstance
+        .delete("/api/v1/schedule/" + data, {
+          headers : {
+            'Authorization' : `Bearer ${Cookies.get("token")}`
+          }
+        })
+        .then((res) => {
+          console.log(res.message)
+        })
+        .catch((e) => {
+          tempError.push("Delete Periode " + data + " Failed : " +e.message)
+        })
+    })
+
+    console.log("===== Update =====")
+    // console.log(nama, desc, alamat, lokasi)
+    // Update Building
+    axiosInstance
+      .patch("/api/v1/building/" + buildingID,  {
+        "building_name": nama,
+        "description":desc,
+        "address":alamat,
+        "id_complex":lokasi.value,
+        "total_room":15,
+        "room_space":20,
+      },
+      {
+        headers : {
+          'Authorization' : `Bearer ${Cookies.get("token")}`
+        }
+      })
+      .then((res) => {
+        console.log(res)
+      })
+      .catch((e) => {
+        // console.log(e.message)
+        tempError.push("Update Building Failed : " +e.message)
+      })
+      
+    // console.log(fasilTerdekatDB)
+    fasilTerdekatDB.map((data) => {
+      axiosInstance
+        .patch("/api/v1/facility/" + data.id, {
+          "name":data.name,
+          "type":data.type.value,
+        },{
+          headers : {
+            'Authorization' : `Bearer ${Cookies.get("token")}`
+          }
+        })
+        .then((res) => {
+          console.log(res)
+        })
+        .catch((e) => {
+          // console.log(e.message)
+          tempError.push("Update Fasilitas " + data.id +" Terdekat Failed : " +e.message)
+        })
+    })
+    
+    // console.log(Update)
+    Update.map((data) => {
+      if (objectIsNotNull(data)){
+        axiosInstance
+          .patch("/api/v1/schedule/" + data.id, {
+            "from_date":data.date[0].toLocaleDateString("en-GB").replaceAll('/', '-') +  " " + data.jamMulai.value,
+            "until_date":data.date[1].toLocaleDateString("en-GB").replaceAll('/', '-') +  " " + data.jamAkhir.value,
+            "ready":data.ready,
+            "booked":data.booked,
+            "id_building":buildingID
+          }, {
+            headers : {
+              'Authorization' : `Bearer ${Cookies.get("token")}`
+            }
+          })
+          .then((res) => {
+            console.log(res)
+          })
+          .catch((e) => {
+            // console.log(e.message)
+            tempError.push("Update Periode " + data.id +" Failed : " +e.message)
+          })
+      }
+    })
+    
 
 
-    console.log("Post")
-    console.log(fasilTerdekat)
-    console.log(images)
-    console.log(Post)
+    console.log("===== Post ====")
+    // console.log(fasilTerdekat)
+    fasilTerdekat.map((data) => {
+      if(objectIsNotNull(data)){
+        axiosInstance
+        .post("/api/v1/facility", 
+        {
+          "name":data.name,
+          "type":data.kategori.value 
+        },
+        {
+          headers : {
+            'Authorization' : `Bearer ${Cookies.get("token")}`
+          }
+        })
+        .then((res) => {
+          var id_facility = res.data.data.id
+          axiosInstance
+          .post("/api/v1/nearby",   
+          {
+            "id_building":buildingID,
+            "id_facility":id_facility,
+            "distance": parseInt(data.jarak)
+          },
+          {
+            headers : {
+              'Authorization' : `Bearer ${Cookies.get("token")}`
+            }
+          })
+          .then((res) => {
+            console.log(res)
+          })
+          .catch((e) => {
+            // console.log(e.message)
+            tempError.push("Nearby Failed : " +e.message)
+          })
+        })
+        .catch((e) => {
+          tempError.push("Facility Failed : " +e.message)
+        })  
+      }
+    })
+    // console.log(images)
+    images.map((data) => {
+      const formData = new FormData();
+      formData.append('id_building', buildingID);
+      formData.append('file', data)
+      // console.log(formData)
+      axiosInstance({
+        method: "post",
+        url: "/api/v1/building/image",
+        data: formData,
+        headers: { 
+          'Authorization' : `Bearer ${Cookies.get("token")}`,
+          "Content-Type": "multipart/form-data" 
+        },
+      }).then((res) => {
+        console.log(res)
+      }).catch((e) => {
+        // console.log(e.message)
+        tempError.push("Post Image Failed : " +e.message)
+      })
+    })
+    // console.log(Post)
+    Post.map((data) => {
+      if (data.date !== null || data.jamAkhir !== null || data.jamMulai !== null) {
+        axiosInstance
+        .post("/api/v1/schedule", 
+        {
+          "from_date": data.date[0].toLocaleDateString("en-GB").replaceAll('/', '-') +  " " + data.jamMulai.value,
+          "until_date": data.date[1].toLocaleDateString("en-GB").replaceAll('/', '-') +  " " + data.jamAkhir.value,
+          "ready":true,
+          "booked":false,
+          "id_building":buildingID
+        },
+        {
+          headers : {
+            'Authorization' : `Bearer ${Cookies.get("token")}`
+          }
+        })
+        .then((res) => {
+          console.log(res)
+        })
+        .catch((e) => {
+          // console.log(e.message)
+          tempError.push("Post Periode Failed : " +e.message)
+        }) 
+      }
+    })
 
-    console.log("Still Remain")
-    console.log(imagesDB)
-
+    console.log("===== Still Remain =====")
+    if (tempError.length === 0){
+      window.location.reload();
+    } 
+    setError(tempError) 
   }
+
+  
+  // console.log(error)
 
   return(
     <ContentLayout>
@@ -364,7 +565,7 @@ const EditOffice = () => {
                 <div key={index} className="flex justify-between mt-3 p-3" style={{ border: "1px dashed rgba(7, 7, 35, 0.5)" }}>
                   <div className="flex gap-3">
                     <img src={data.image_url} className="h-[80px] w-[80px] object-cover"/>
-                    <p className="self-center text-[14px] leading-4 font-normal">{data.image_url}</p>
+                    <p className="self-center text-[14px] leading-4 font-normal overflow-hidden">{data.image_url}</p>
                   </div>
                   <img src="/trash.svg" alt="trash.svg" className="h-[16px] w-[16px] self-center cursor-pointer" onClick={() => {handleTempHapus(data.id, "images"); handleHapus(index, imagesDB, setImagesDB)}}/>
                 </div>
@@ -387,11 +588,13 @@ const EditOffice = () => {
         {
           error.length > 0 ? 
           <div className="flex justify-center">
-            {
-              error.map((data, index) => (
-                <p key={index}>{data}</p>
-              ))
-            }
+            <div>
+              {
+                error.map((data, index) => (
+                  <p key={index}>{data}</p>
+                ))
+              }
+            </div>
           </div> 
           : ""
         }
