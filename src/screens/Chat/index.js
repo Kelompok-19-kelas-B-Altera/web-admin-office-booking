@@ -57,9 +57,9 @@ const Chat = () => {
   return (
     <ContentLayout>
       <ContentHeader title="chat" />
-      <div className="flex gap-[32px] w-full h-[592px]">
+      <div className="flex gap-[32px] w-full h-[592px] ">
         {/* leftside */}
-        <div className="min-w-[242px] w-[242px] h-full bg-white">
+        <div className={`min-w-[242px] w-[242px] h-full bg-white overflow-auto ${styles.scrollbar}`}>
           {chatRoomData?.getAllChatroomByUsersIdContaining?.map((e) => (
             <div key={e.id}>
               {/* box */}
