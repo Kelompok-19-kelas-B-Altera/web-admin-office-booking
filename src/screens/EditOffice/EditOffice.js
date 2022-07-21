@@ -90,10 +90,10 @@ const EditOffice = () => {
   //   setImages(temp)
   // }
 
-  const handleFasilChange = (index, name, value) => {
-    var temp = [...fasilTerdekat]
+  const handleFasilChange = (index, name, value, list, Setfunction) => {
+    var temp = [...list]
     temp[index][name] = value
-    setfasilTerdekat(temp)
+    Setfunction(temp)
   }
 
   const handleImages = (e) => {
@@ -218,7 +218,42 @@ const EditOffice = () => {
       })
   }, [])
   
-  console.log(TempDelete)
+  const EditOffice = () => {
+    var Update = []
+    var Post = []
+
+    Update = periode.filter((data) => {
+      if (data.id !== null){
+        return data
+      }
+    })
+
+    Post = periode.filter((data) => {
+      if(data.id === null){
+        return data
+      }
+    })
+
+
+    
+    console.log("Delete")
+    console.log(TempDelete)
+
+    console.log("Update")
+    console.log(nama, desc, alamat, lokasi)
+    console.log(fasilTerdekatDB)
+    console.log(Update)
+
+
+    console.log("Post")
+    console.log(fasilTerdekat)
+    console.log(images)
+    console.log(Post)
+
+    console.log("Still Remain")
+    console.log(imagesDB)
+
+  }
 
   return(
     <ContentLayout>
@@ -231,7 +266,7 @@ const EditOffice = () => {
             <InputTextField label={"Nama *"} value={nama} name={"name"} placeholder={"Masukan Nama Kantor"} setChange={(e) => setNama(e.target.value)}/>
             <InputTextArea label={"Deskripsi *"} value={desc} name={"desc"} placeholder={"Kantor ini nyaman dan sangat murah dan berkualitas.."} setChange={(e) => setDesc(e.target.value)}/>
             <InputTextField label={"Alamat *"} value={alamat}  placeholder="Masukan Alamat" setChange={(e) => setAlamat(e.target.value)}/>
-            <InputSelect label={"Lokasi *"} value={lokasi}  placeholder="Pilih Lokasi" options={options} setChange={(e) => setLokasi(e.value)}/>
+            <InputSelect label={"Lokasi *"} value={lokasi}  placeholder="Pilih Lokasi" options={options} setChange={setLokasi}/>
           </div>
           {/* Right Side */}
           <div className="w-1/2">
@@ -240,10 +275,10 @@ const EditOffice = () => {
             {
               fasilTerdekatDB.map((data, index) => (
                 <div key={index} className="flex justify-around gap-[10px]">
-                  <InputTextField name={"name"} placeholder={"ex. Bandara Depati Amir"} value={data.name} setChange={(e) => handleFasilChange(index, "name", e.target.value)}/>
-                  <InputSelect value={data.type} placeholder={"Pilih Kategori"} options={optionsFasil} setChange={(e) => handleFasilChange(index, "kategori", e.value)}/>
+                  <InputTextField name={"name"} placeholder={"ex. Bandara Depati Amir"} value={data.name} setChange={(e) => handleFasilChange(index, "name", e.target.value, fasilTerdekatDB, setfasilTerdekatDB)}/>
+                  <InputSelect value={data.type} placeholder={"Pilih Kategori"} options={optionsFasil} setChange={(e) => handleFasilChange(index, "type", e, fasilTerdekatDB, setfasilTerdekatDB)}/>
                   <div className="w-[120px]">
-                    <InputTextField name={"jarak"} placeholder={"KM"} value={data.distance} setChange={(e) => handleFasilChange(index, "jarak", e.target.value)}/>
+                    <InputTextField name={"jarak"} placeholder={"KM"} value={data.distance} setChange={(e) => handleFasilChange(index, "jarak", e.target.value, fasilTerdekatDB, setfasilTerdekatDB)}/>
                   </div>
                   <img src="/trash.svg" alt="trash.svg" className="h-[16px] w-[16px] self-center cursor-pointer" onClick={() => {handleTempHapus(data.id, "fasilTerdekat"); handleHapus(index, fasilTerdekatDB, setfasilTerdekatDB)}}/>
                 </div>
@@ -252,10 +287,10 @@ const EditOffice = () => {
             {
               fasilTerdekat.map((data, index) => ( 
               <div key={index} className="flex justify-around gap-[10px]">
-                <InputTextField name={"name"} placeholder={"ex. Bandara Depati Amir"} value={data.name} setChange={(e) => handleFasilChange(index, "name", e.target.value)}/>
-                <InputSelect value={data.kategori} placeholder={"Pilih Kategori"} options={optionsFasil} setChange={(e) => handleFasilChange(index, "kategori", e.value)}/>
+                <InputTextField name={"name"} placeholder={"ex. Bandara Depati Amir"} value={data.name} setChange={(e) => handleFasilChange(index, "name", e.target.value, fasilTerdekat, setfasilTerdekat)}/>
+                <InputSelect value={data.kategori} placeholder={"Pilih Kategori"} options={optionsFasil} setChange={(e) => handleFasilChange(index, "kategori", e, fasilTerdekat, setfasilTerdekat)}/>
                 <div className="w-[120px]">
-                  <InputTextField name={"jarak"} placeholder={"KM"} value={data.jarak} setChange={(e) => handleFasilChange(index, "jarak", e.target.value)}/>
+                  <InputTextField name={"jarak"} placeholder={"KM"} value={data.jarak} setChange={(e) => handleFasilChange(index, "jarak", e.target.value, fasilTerdekat, setfasilTerdekat)}/>
                 </div>
                 <img src="/trash.svg" alt="trash.svg" className="h-[16px] w-[16px] self-center cursor-pointer" onClick={() => {handleHapus(index, fasilTerdekat, setfasilTerdekat)}}/>
               </div>
@@ -361,7 +396,7 @@ const EditOffice = () => {
           : ""
         }
         <div className="flex justify-center mt-8">
-          <button className="py-[17px] rounded bg-[#197BEB] w-[336px]" onClick={() => console.log("test")}>
+          <button className="py-[17px] rounded bg-[#197BEB] w-[336px]" onClick={() => EditOffice()}>
             <p className="font-bold text-[14px] leading-4 text-white" style={{ fontStyle : "normal" }}>Simpan Perubahaan</p>
           </button>
         </div>
