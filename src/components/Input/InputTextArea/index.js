@@ -1,6 +1,6 @@
 
 
-const InputTextArea = ({label, name, placeholder, setChange, disable}) => {
+const InputTextArea = ({label, name, placeholder, setChange, disable, value}) => {
   return(
     <div className="flex flex-col gap-[6px] mb-3 w-full">
       <label className="text-[#070723] text-[14px] leading-4">{label}</label>
@@ -11,9 +11,9 @@ const InputTextArea = ({label, name, placeholder, setChange, disable}) => {
           // style={{ border: "1px solid rgba(7, 7, 35, 0.5)" }}
           rows="7"
           onChange={setChange}
-          
+          value={value}
         >
-          
+          {value}
         </textarea>
     </div>
   )
