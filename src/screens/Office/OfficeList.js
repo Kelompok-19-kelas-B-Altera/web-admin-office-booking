@@ -21,6 +21,7 @@ const OfficeList = () => {
         filters: [
           {
             key: "buildingName",
+            join: "",
             operator: "LIKE",
             field_type: "STRING",
             value: inputSearch,
@@ -37,7 +38,7 @@ const OfficeList = () => {
         setListBuildings(res.data.data.content);
       });
       console.log("triggered")
-  }, [entries, page, triggerRequestOnDelete]);
+  }, [entries, page, triggerRequestOnDelete, inputSearch]);
 
   const handleDelete = (e) => {
     const id = Number(e.target.id);
