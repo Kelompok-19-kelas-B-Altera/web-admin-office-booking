@@ -8,9 +8,10 @@ import {
 } from "../../components";
 import axiosInstance from "../../networks/apis";
 import Cookies from 'js-cookie';
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const BookOffice = () => {
+  var navigate = useNavigate()
   let { buildingID } = useParams();
   const [BuildingName, setBuildingName] = useState("")
   const [BuildingAddress, setBuildingAddress] = useState("")
@@ -22,6 +23,7 @@ const BookOffice = () => {
   const [noHP, setNoHP] = useState("");
   const [optionName, setOptionsName] = useState([]);
   const [buttonActive, setButtonActive] = useState(false);
+  const [error, setError] = useState([])
   
 
   useEffect(() => {
@@ -39,6 +41,9 @@ const BookOffice = () => {
         })
         setOptionsName(temp)
       }).catch((e) => {
+        var errorMsg = [...error]
+        errorMsg.push("Get All User Failed : " +e.message)
+        setError(errorMsg)
         console.log(e)
       })
   }, [])
@@ -52,7 +57,7 @@ const BookOffice = () => {
       schedule = res.data.data.schedules.map((data) => {
         return {
           value : data.id,
-          label : formatingDate(data.from_date) + " | " + formatingDate(data.until_date)
+          label : "FROM : " + formatingDate(data.from_date) + " | TO : " + formatingDate(data.until_date)
         }
       })
       setoptions(schedule)
@@ -61,6 +66,9 @@ const BookOffice = () => {
       setBuildingLokasi(res.data.data.complex.city)
     })
     .catch((e) => {
+      var errorMsg = [...error]
+      errorMsg.push("Get Building Failed : " +e.message)
+      setError(errorMsg)
       console.log(e)
     })
   }, [])
@@ -90,6 +98,7 @@ const BookOffice = () => {
     axiosInstance
       .post("/api/v1/booking" ,
       { 
+        "status":true,
         "id_user":nama.value,
         "id_schedule":selectedOption.value
       }, 
@@ -100,8 +109,12 @@ const BookOffice = () => {
       })
       .then((res) => {
         console.log(res)
+        navigate("/Office/booked-office")
       })
       .catch((e) => {
+        var errorMsg = [...error]
+        errorMsg.push("Booking Failed : " +e.message)
+        setError(errorMsg)
         console.log(e)
       })
   }
@@ -137,9 +150,21 @@ const BookOffice = () => {
             <div className="flex gap-[15px]">
               <InputSelect value={selectedOption} options={options} setChange={setSelectedOption} placeholder={"Pilih Periode"}/>
             </div>
-
           </div>
         </div>
+        {
+          error.length > 0 ? 
+          <div className="flex justify-center">
+            <div>
+              {
+                error.map((data, index) => (
+                  <p key={index}>{data}</p>
+                ))
+              }
+            </div>
+          </div> 
+          : ""
+        }
         <div className="flex justify-center mt-8">
           <button className={`py-[17px] rounded ${buttonActive ? "bg-[#197BEB]" : "bg-[#197BEB]/50"}  w-[336px]`} disabled={buttonActive ? false : true} onClick={() => {Booking()}}>
             <p className="font-bold text-[14px] leading-4 text-white" style={{ fontStyle : "normal" }}>Pesan Kantor</p>

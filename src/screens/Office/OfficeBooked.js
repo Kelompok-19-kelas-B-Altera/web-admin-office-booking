@@ -5,8 +5,10 @@ import {
   handleTotalData,
   handleTotalPage,
 } from "../../utils/redux/features/entriesAndPaginateSlice";
+import { useNavigate } from "react-router-dom";
 
 const OfficeBooked = () => {
+  var navigate = useNavigate()
   let [listBuildings, setListBuildings] = useState([]);
   let [listBuildingsSearched, setListBuildingsSearched] = useState([]);
   const [triggerRequestOnDelete, setTriggerRequestOnDelete] = useState(false);
@@ -142,7 +144,7 @@ const OfficeBooked = () => {
                   </p>
                 </div>
                 <div className="flex justify-center gap-2 w-[106px]">
-                  <button className="w-[98px] h-[43px] bg-[#F3C319] rounded text-white">
+                  <button className="w-[98px] h-[43px] bg-[#F3C319] rounded text-white" onClick={() => navigate("/Office/booked-office/edit-office/" + e.id)}>
                     Edit
                   </button>
                 </div>
@@ -171,7 +173,7 @@ const OfficeBooked = () => {
                   </p>
                 </div>
                 <div className="flex justify-center gap-2 w-[106px]">
-                  <button className="w-[98px] h-[43px] bg-[#F3C319] rounded text-white">
+                  <button className="w-[98px] h-[43px] bg-[#F3C319] rounded text-white" onClick={() => navigate("/Office/booked-office/edit-office/" + e.id)}>
                     Edit
                   </button>
                 </div>
