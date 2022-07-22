@@ -98,7 +98,6 @@ const BookOffice = () => {
     axiosInstance
       .post("/api/v1/booking" ,
       { 
-        "status":true,
         "id_user":nama.value,
         "id_schedule":selectedOption.value
       }, 
