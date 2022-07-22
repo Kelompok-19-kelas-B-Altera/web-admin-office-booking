@@ -114,30 +114,7 @@ const EditOffice = () => {
     temp[section].push(index)
     setTempDelete(temp)
   }
-
-  const handleTambahPeriode = () => {
-    var newPeriode = [...periode]
-    newPeriode.push({
-      id : null,
-      date : null,
-      jamMulai : null,
-      jamAkhir : null,
-      ready : null,
-      booked : null,
-    })
-    setPeriode(newPeriode)
-  }
-
-  const handleHapusPeriode = (index) => {
-    var temp = [...periode]
-    if(periode.id !== null){
-      handleTempHapus(temp[index].id, "periode")
-    } 
-    temp.splice(index,1)
-    setPeriode(temp)
-  }
-  
-
+ 
   useEffect(() => {
     axiosInstance
       .get("/api/v1/complex")
@@ -220,6 +197,7 @@ const EditOffice = () => {
         setError(errorMsg)
       })
   }, [])
+
 
   const objectIsNotNull = (object) => {
     return Object.values(object).every(value => {
@@ -479,7 +457,7 @@ const EditOffice = () => {
     
   }
 
-  
+
   // console.log(error)
 
   return(
