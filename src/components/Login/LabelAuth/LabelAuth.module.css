@@ -1,0 +1,23 @@
+.emailLabel,
+.passwordLabel {
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 19px;
+  color: var(--color-dark-blue);
+
+  margin-bottom: 10px;
+  text-transform: capitalize;
+}
+
+.emailLabelMobile,
+.passwordLabelMobile {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 16px;
+
+  margin-bottom: 6px;
+
+  color: var(--color-secondary);
+  text-transform: capitalize;
+
+}

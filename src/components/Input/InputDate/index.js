@@ -1,19 +1,27 @@
 import { useState } from "react";
 import CustomCalender from "../../Calender";
 
-const InputDate = ({date, setDate, disable}) => {
+const InputDate = ({date, setDate, disable, range}) => {
   const [show, setShow ] = useState(false);
   
   return(
-    <div className="relative mt-[6px] mb-[6px]">
+    <div className="w-full relative mt-[6px] mb-[6px]">
       <button className={`flex justify-between rounded border p-[10px] w-full ${disable ? "bg-[#F1F1F1]" : "bg-white border-[#070723]/50"}`} 
         disabled={disable} 
         onClick={() => setShow(!show)}>
         {
           date === null ?  
-          <p className="self-center text-[#070723]/50 font-normal text-[14px] leading-4">Pilih Tanggal Mulai</p>
+          <p className="self-center text-[#070723]/50 font-normal text-[14px] leading-4 pt-[1px]">Pilih Tanggal Mulai</p>
           :
-          <p className="self-center font-normal text-[14px] leading-4">{date.toLocaleDateString()}</p>
+          date.length > 0 ? 
+          <p className='self-center font-normal text-[13.5px] leading-4 pt-[1px]'>
+            {date[0].toLocaleDateString("en-GB")}
+            &nbsp;-&nbsp;
+            {date[1].toLocaleDateString("en-GB")}
+          </p>
+          :
+          <p className="self-center font-normal text-[14px] leading-4 pt-[1px]">{date.toLocaleDateString("en-GB")}</p>
+          
         }
         <img src="/calender/ic_baseline-date-range.svg" alt="logo" className="self-center"/>
       </button>
@@ -26,7 +34,7 @@ const InputDate = ({date, setDate, disable}) => {
           >
             <p className="text-white">X</p>
           </button> */}
-          <CustomCalender setDate={setDate}/>
+          <CustomCalender setDate={setDate} selectRange={range}/>
         </div>
         :
         <></>

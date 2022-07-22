@@ -5,15 +5,20 @@ import reportWebVitals from "./reportWebVitals";
 import "./index.css";
 import App from "./App";
 
+import { ApolloProvider } from '@apollo/client';
+
 // redux
 import { store } from "./utils/redux/store";
 import { Provider } from "react-redux";
+import client from "./networks/graphql";
 
 ReactDOM.render(
   <React.StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
+    <ApolloProvider client={client}>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </ApolloProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );
