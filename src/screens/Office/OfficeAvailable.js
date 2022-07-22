@@ -67,6 +67,31 @@ const OfficeAvailable = () => {
     // console.log("triggered");
   }, [entries, page, triggerRequestOnDelete]);
 
+  useEffect(() => {
+    axiosInstance
+      .post("/api/v1/building/search", {
+        filters: [
+          {
+            key: "buildingName",
+            join: "",
+            operator: "LIKE",
+            field_type: "STRING",
+            value: inputSearch,
+          },
+        ],
+        sorts: [],
+        page: page,
+        size: entries,
+      })
+      .then((res) => {
+        // console.log(res.data.data);
+        dispatch(handleTotalPage(res.data.data.totalPages));
+        dispatch(handleTotalData(res.data.data.totalElements));
+        setListBuildings(res.data.data.content);
+      });
+    console.log("triggered");
+  }, [entries, page, triggerRequestOnDelete, inputSearch]);
+
   return (
     <div className="p-[10px]">
       <div className="flex text-base font-semibold text-[#070723]">
@@ -83,7 +108,7 @@ const OfficeAvailable = () => {
             <p className="mr-[32px] w-[21px] my-auto text-center">{index + 1}</p>
             <div className="flex items-center w-[332px] mr-[32px] flex-1">
               <img
-                src={e.images[e.images.length-1]?.image_url}
+                src={e.images[e.images.length - 1]?.image_url}
                 alt="photo-profile"
                 className="w-[50px] h-[50px] rounded-full object-cover mr-[32px]"
               />
