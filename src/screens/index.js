@@ -14,4 +14,5 @@ export {default as AddOffice} from "./AddOffice"
 export {default as BookOffice} from "./BookOffice"
 export {default as EditBookedOffice} from "./EditOffice/EditBookedOffice"
 export {default as EditOffice} from "./EditOffice/EditOffice"
+export {default as PrivateRoot} from "./PrivateRoot"
 

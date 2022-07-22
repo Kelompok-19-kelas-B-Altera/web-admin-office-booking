@@ -1,6 +1,6 @@
 import Select from 'react-select';
 
-const InputSelect = ({label, placeholder, options, setChange, value, disable, padding, border}) => {
+const InputSelect = ({label, placeholder, options, setChange, value, disable, padding, border, optionsDisable}) => {
 
   const customStyles = {
     control: (base, state) => ({
@@ -25,13 +25,15 @@ const InputSelect = ({label, placeholder, options, setChange, value, disable, pa
     <div className="flex flex-col gap-[6px] mb-3 w-full">
       <label className="text-[#070723] text-[14px] leading-4">{label}</label>
       <Select
-        defaultValue={value}
+        value={value}
         onChange={setChange}
         placeholder={placeholder}
         isSearchable={true}
         styles={customStyles}
         options={options}
         isDisabled={disable}
+        isOptionDisabled={optionsDisable}
+        noOptionsMessage={() => "Data Kosong Atau Tidak Ditemukan"}
       />
     </div>
   )

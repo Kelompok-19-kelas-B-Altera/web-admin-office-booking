@@ -19,6 +19,7 @@ const Next = () => {
 const CustomCalender = ({ date, setDate, selectRange }) => {
   // const [date, setDate] = useState(new Date());
   
+  
   const formatShortWeekday = (locale, date) => ["S", "M", "T", "W", "T", "F", "S"][date.getDay()];
 
   return (
@@ -34,6 +35,9 @@ const CustomCalender = ({ date, setDate, selectRange }) => {
         showNeighboringMonth={false}
         nextLabel={<Next />}
         prevLabel={<Back />}
+        minDate={
+          new Date()
+        }
       />
     </>
   );

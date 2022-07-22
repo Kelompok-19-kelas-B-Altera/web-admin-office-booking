@@ -54,7 +54,7 @@ const NavbarOffice = () => {
       </div>
 
       {window.location.pathname === "/Office/available-office" && (
-        <NavLink to="/Office/office-list/add-office">
+        <NavLink to="/Office/available-office/add-office">
           <button className="w-[130px] h-[39px] bg-[#197BEB] text-white rounded">
             Tambah Kantor
           </button>

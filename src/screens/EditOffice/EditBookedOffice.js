@@ -1,26 +1,119 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ContentContainer,
   ContentHeader,
   ContentLayout,
   InputTextField,
-  InputTextArea,
   InputSelect,
-  InputDate,
-  CustomCalender
 } from "../../components";
+import axiosInstance from "../../networks/apis";
+import Cookies from 'js-cookie';
+import { useParams } from "react-router-dom";
 
-const EditBookedOffice = () => {
-  const options = [
-    {label : "Lunas", value : "Lunas"},
-    {label : "DP", value : "DP"},
-  ]
+const BookOffice = () => {
+  let { buildingID } = useParams();
+  const [BuildingName, setBuildingName] = useState("")
+  const [BuildingAddress, setBuildingAddress] = useState("")
+  const [BuildingLokasi, setBuildingLokasi] = useState("")
 
-  const [option, setoption] = useState({label : "Lunas", value : "Lunas"});
-  const [date1, setDate1] = useState(null);
-  const [date2, setDate2] = useState(null);
-  const [nama, setNama] = useState("Zananda Aditya");
-  const [noHP, setNoHP] = useState("019283120421");  
+  const [options, setoptions] = useState(null);
+  const [selectedOption, setSelectedOption] = useState(null);
+  const [nama, setNama] = useState(null);
+  const [noHP, setNoHP] = useState("");
+  const [optionName, setOptionsName] = useState([]);
+  const [buttonActive, setButtonActive] = useState(false);
+  
+
+  useEffect(() => {
+    axiosInstance
+      .get("/api/v1/user/management", {
+        headers : {
+          'Authorization' : `Bearer ${Cookies.get("token")}`,
+        }
+      }).then((res) => {
+        const temp = res.data.data.slice(1, res.data.data.length).map((data) => {
+          return {
+            label : data.fullname,
+            value : data.id
+          }
+        })
+        setOptionsName(temp)
+      }).catch((e) => {
+        console.log(e)
+      })
+  }, [])
+  
+  useEffect(() => {
+    
+    axiosInstance
+    .get("/api/v1/building/" + buildingID)
+    .then((res) => {
+      var schedule = []
+      schedule = res.data.data.schedules.map((data) => {
+        return {
+          value : data.id,
+          label : "FROM : " + formatingDate(data.from_date) + " | TO : " + formatingDate(data.until_date)
+        }
+      })
+      setoptions(schedule)
+      setBuildingName(res.data.data.building_name)
+      setBuildingAddress(res.data.data.address)
+      setBuildingLokasi(res.data.data.complex.city)
+    })
+    .catch((e) => {
+      console.log(e)
+    })
+  }, [])
+
+  const formatingDate = (value) => {
+    var temp, date, time
+    var i = 0
+    
+    while (value[i] !== " "){
+      i++
+    }
+
+    temp = value.slice(0, i)
+    date = temp.split("-")
+    time = value.slice(i+1, value.length)
+    
+    const newDate = new Date(+date[2], +date[1] - 1, date[0])
+    
+    return (newDate.getDate() + " " + newDate.toLocaleString('default', { month: 'long' }) + " " + newDate.getFullYear() + " " + time)
+    
+
+  }
+
+
+  const Booking = () => {
+    
+    axiosInstance
+      .post("/api/v1/booking" ,
+      { 
+        "id_user":nama.value,
+        "id_schedule":selectedOption.value
+      }, 
+      {
+        headers : {
+          'Authorization' : `Bearer ${Cookies.get("token")}`
+        }
+      })
+      .then((res) => {
+        console.log(res)
+      })
+      .catch((e) => {
+        console.log(e)
+      })
+  }
+
+  useEffect(() => {
+    if(noHP.length >= 12 && selectedOption !== null && nama !== null){
+      setButtonActive(true)
+    } else {
+      setButtonActive(false)
+    }
+  }, [nama, noHP, selectedOption])
+
 
   return(
     <ContentLayout>
@@ -29,36 +122,27 @@ const EditBookedOffice = () => {
         <div className="flex justify-between gap-[120px]">
           
           <div className="w-1/2 flex flex-col gap-3">
-            <InputTextField label={"Nama"} disable={true} value={"Ini Hanya Dummy"}/>
-            <InputSelect label={"Alamat"} disable={true} placeholder={"Ini Hanya Dummy"}/>
-            <InputSelect label={"Lokasi"} disable={true} placeholder={"Ini Hanya Dummy"}/>
+            <InputTextField label={"Nama"} disable={true} value={BuildingName}/>
+            <InputTextField label={"Alamat"} disable={true} placeholder={BuildingAddress}/>
+            <InputSelect label={"Lokasi"} disable={true} placeholder={BuildingLokasi}/>
           </div>
           <div className="w-1/2 flex flex-col gap-3">
-            <InputTextField label={"Nama Pemesan"} value={nama} setChange={(e) => setNama(e.target.value)} placeholder={"Masukkan nama pemesan"}/>
+            <InputSelect value={nama} setChange={setNama} options={optionName} label={"Nama Pemesan"} placeholder={"Pilih Nama"}/>
             <InputTextField label={"Nomor Telepon"} value={noHP} setChange={(e) => setNoHP(e.target.value)} placeholder={"Masukkan nomor telepon"}/>
-            <InputSelect value={option} setChange={setoption} options={options} label={"Status Pembayaran"} placeholder={"Pilih Status"}/>
           </div>
         </div>
         <div className="flex justify-center mt-8">
-          <div className="">
-            <p className="text-[16px] leading-[18px] font-semibold mb-3 text-center">Tanggal Pemesanan</p>
-            {/* <CustomCalender selectRange={false}/> */}
+          <div className="w-[55%]">
+            <p className="text-[16px] leading-[18px] font-semibold mb-3 text-center">Periode Tersedia</p>
             <div className="flex gap-[15px]">
-              <div className="flex flex-col gap-[6px] w-[250px]">
-                <InputDate date={date1} setDate={setDate1} disable={true}/>
-                <InputDate date={date2} setDate={setDate2} disable={true}/>
-              </div>
-              <div className="flex flex-col w-[250px]">
-                <InputSelect placeholder={"Pilih Jam Mulai"} padding={'1px'} border={"#07072370"} disable={true}/>
-                <InputSelect placeholder={"Pilih Jam Mulai"} padding={'1px'} border={"#07072370"} disable={true}/>
-              </div>
+              <InputSelect value={selectedOption} options={options} setChange={setSelectedOption} placeholder={"Pilih Periode"}/>
             </div>
 
           </div>
         </div>
         <div className="flex justify-center mt-8">
-          <button className="py-[17px] rounded bg-[#197BEB] w-[336px]" onClick={() => console.log("Ke Klik")}>
-            <p className="font-bold text-[14px] leading-4 text-white" style={{ fontStyle : "normal" }}>Simpan Kantor</p>
+          <button className={`py-[17px] rounded ${buttonActive ? "bg-[#197BEB]" : "bg-[#197BEB]/50"}  w-[336px]`} disabled={buttonActive ? false : true} onClick={() => {Booking()}}>
+            <p className="font-bold text-[14px] leading-4 text-white" style={{ fontStyle : "normal" }}>Pesan Kantor</p>
           </button>
         </div>
       </ContentContainer>
@@ -66,4 +150,4 @@ const EditBookedOffice = () => {
   )
 }
 
-export default EditBookedOffice;
+export default BookOffice; 
