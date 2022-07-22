@@ -109,13 +109,13 @@ const BookOffice = () => {
       })
       .then((res) => {
         console.log(res)
+
         navigate("/Office/booked-office")
       })
       .catch((e) => {
         var errorMsg = [...error]
         errorMsg.push("Booking Failed : " +e.message)
         setError(errorMsg)
-        console.log(e)
       })
   }
 

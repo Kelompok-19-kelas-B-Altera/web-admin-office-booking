@@ -43,6 +43,7 @@ function App() {
               <Route path="/Office/available-office/add-office" element={<AddOffice />} />
               <Route path="/Office/available-office/:buildingID/book-office" element={<BookOffice />} />
               <Route path="/Office/booked-office/edit-office/:buildingID" element={<EditBookedOffice />} />
+
               <Route path="/Office/office-list/edit-office/:buildingID" element={<EditOffice />} />
             </Route>
             <Route path="/login" element={<Login />} />

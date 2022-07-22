@@ -6,8 +6,10 @@ import {
   handleTotalPage,
 } from "../../utils/redux/features/entriesAndPaginateSlice";
 import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
 
 const OfficeList = () => {
+  let navigate = useNavigate()
   let [listBuildings, setListBuildings] = useState();
   const [triggerRequestOnDelete, setTriggerRequestOnDelete] = useState(false)
   const entries = useSelector((state) => state.entriesAndPaginationSlice.entries);
@@ -83,7 +85,7 @@ const OfficeList = () => {
               {`${element.address}, ${element.complex.city}`}
             </p>
             <div className="flex gap-2 w-[200px] flex-1">
-              <button className="min-w-[180.5px] w-full h-[43px] bg-[#F3C319] rounded text-white">
+              <button className="min-w-[180.5px] w-full h-[43px] bg-[#F3C319] rounded text-white" onClick={() => {navigate("/Office/office-list/edit-office/" + element.id)}}>
                 Edit
               </button>
               <button
