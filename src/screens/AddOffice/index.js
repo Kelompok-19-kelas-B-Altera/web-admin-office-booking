@@ -124,8 +124,6 @@ const AddOffice = () => {
     temp.splice(index,1)
     setPeriode(temp)
   }
-  
-
 
   const validasiInput = () => {
     if (nama.length > 5 || desc.length > 5 || alamat.length > 5 || lokasi !== null){
@@ -251,7 +249,7 @@ const AddOffice = () => {
             
           }
           setLoading(false)
-          // navigate("/Office/office-list")
+          navigate("/Office/office-list")
         })
       })
       .catch((e) => {

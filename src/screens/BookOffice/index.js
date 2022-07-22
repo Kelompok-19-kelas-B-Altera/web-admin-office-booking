@@ -4,49 +4,27 @@ import {
   ContentHeader,
   ContentLayout,
   InputTextField,
-  InputTextArea,
   InputSelect,
-  InputDate,
 } from "../../components";
 import axiosInstance from "../../networks/apis";
 import Cookies from 'js-cookie';
+import { useNavigate, useParams } from "react-router-dom";
 
 const BookOffice = () => {
-  const building = "SAMOFIS | Coworking Space | Virtual Office | Meeting Room"
-  const address = "Jl. Cikini IV No.10, RT.15/RW.5, Cikini, Kec. Menteng"
-  const lokasi = "Jakarta Pusat"
+  var navigate = useNavigate()
+  let { buildingID } = useParams();
+  const [BuildingName, setBuildingName] = useState("")
+  const [BuildingAddress, setBuildingAddress] = useState("")
+  const [BuildingLokasi, setBuildingLokasi] = useState("")
 
-  const timeSetting = {hour : "2-digit" , minute : "2-digit", second : "2-digit", hour12: false};
-
-  const options = [
-    {label : "Lunas", value : "Lunas"},
-    {label : "DP", value : "DP"},
-  ]
-
-  const [option, setoption] = useState(null);
-  const [date1, setDate1] = useState(null);
-  const [date2, setDate2] = useState(null);
+  const [options, setoptions] = useState(null);
+  const [selectedOption, setSelectedOption] = useState(null);
   const [nama, setNama] = useState(null);
   const [noHP, setNoHP] = useState("");
-  const [optionName, setOptionsName] = useState([])
-  const [buttonActive, setButtonActive] = useState(false)
-  const [timeOne, setTimeOne] = useState(null);
-  const [timeTwo, setTimeTwo] = useState(null);
+  const [optionName, setOptionsName] = useState([]);
+  const [buttonActive, setButtonActive] = useState(false);
+  const [error, setError] = useState([])
   
-
-  const optionTime = () => {
-    const temp = []
-    var jam = ""
-    for (var i = 0; i < 25; i++){
-      i < 10 ? jam =  "0" + i : jam = i 
-      temp.push(
-        {label : jam + ":00:00", value : jam.toString()},
-      )
-    }
-    return temp
-  }
-
-  const [time, setTime] = useState(optionTime)
 
   useEffect(() => {
     axiosInstance
@@ -63,128 +41,95 @@ const BookOffice = () => {
         })
         setOptionsName(temp)
       }).catch((e) => {
+        var errorMsg = [...error]
+        errorMsg.push("Get All User Failed : " +e.message)
+        setError(errorMsg)
         console.log(e)
       })
   }, [])
+  
+  useEffect(() => {
+    
+    axiosInstance
+    .get("/api/v1/building/" + buildingID)
+    .then((res) => {
+      // console.log(res)
+      var filter = []
+      filter = res.data.data.schedules.filter((data) => {
+        return data.ready === true & data.booked === false
+      })
+      var schedule = filter.map((data) => {
+        return {
+          value : data.id,
+          label : "FROM : " + formatingDate(data.from_date) + " | TO : " + formatingDate(data.until_date)
+        }
+      })
+      setoptions(schedule)
+      setBuildingName(res.data.data.building_name)
+      setBuildingAddress(res.data.data.address)
+      setBuildingLokasi(res.data.data.complex.city)
+    })
+    .catch((e) => {
+      var errorMsg = [...error]
+      errorMsg.push("Get Building Failed : " +e.message)
+      setError(errorMsg)
+      console.log(e)
+    })
+  }, [])
 
-  const handleTimeChange = (date, value, setTime) => {
-    try {
-      date.setHours(value)
-      date.setMinutes(0)
-      date.setSeconds(0)
-      setTime(time[value])
-    } catch (e) {
-      // console.log(e)
-    } 
+  const formatingDate = (value) => {
+    var temp, date, time
+    var i = 0
+    
+    while (value[i] !== " "){
+      i++
+    }
+
+    temp = value.slice(0, i)
+    date = temp.split("-")
+    time = value.slice(i+1, value.length)
+    
+    const newDate = new Date(+date[2], +date[1] - 1, date[0])
+    
+    return (newDate.getDate() + " " + newDate.toLocaleString('default', { month: 'long' }) + " " + newDate.getFullYear() + " " + time)
+    
+
   }
+
 
   const Booking = () => {
     
-    var firstDate = date1.toLocaleDateString("en-GB", timeSetting).replace(/,/g, '')
-    firstDate = firstDate.replaceAll('/', '-')
-    var secondDate = date2.toLocaleDateString("en-GB", timeSetting).replace(/,/g, '')
-    secondDate = secondDate.replaceAll('/', '-')
-
     axiosInstance
-      .post("/api/v1/schedule",{ 
-        "from_date":firstDate,
-        "until_date":secondDate,
-        "ready":true,
-        "booked":false,
-        "id_building":1
+      .post("/api/v1/booking" ,
+      { 
+        "id_user":nama.value,
+        "id_schedule":selectedOption.value
       }, 
       {
         headers : {
           'Authorization' : `Bearer ${Cookies.get("token")}`
         }
-      }).then((res) => {
-        const idSchedule = res.data.data.id
-        console.log(idSchedule)
-        axiosInstance
-          .post("/api/v1/booking" ,
-          { 
-            "status":true,
-            "id_user":nama.value,
-            "id_schedule":3
-          }, 
-          {
-            headers : {
-              'Authorization' : `Bearer ${Cookies.get("token")}`
-            }
-          })
-          .then((res) => {
-            console.log(res)
-          })
-          .catch((e) => {
-            console.log(e)
-          })
-      }).catch((e) => {
+      })
+      .then((res) => {
+        console.log(res)
+
+        navigate("/Office/booked-office")
+      })
+      .catch((e) => {
+        var errorMsg = [...error]
+        errorMsg.push("Booking Failed : " +e.message)
+        setError(errorMsg)
         console.log(e)
       })
   }
 
-  const conditionalFirstDate = () => {
-    if(date1 !== null){
-      return date1.toLocaleDateString() === new Date(Date.now()).toLocaleDateString() ? new Date(Date.now()).getHours() : ""
-    } else {
-      return 25
-    }
-  }
-
-  const conditionalSecondDate = () => {
-    if(date1 !== null){
-      return date1.toLocaleDateString() === date2.toLocaleDateString() ? date1.getHours() : ""
-    } else if (date2 === null){
-      return 25
-    } else if (date2.toLocaleDateString() === new Date(Date.now()).toLocaleDateString()) {
-      return new Date(Date.now()).getHours() + 1
-    }
-  }
-
   useEffect(() => {
-    if(date1 !== null){
-      if(date1.toLocaleDateString() === new Date(Date.now()).toLocaleDateString() ){
-        setTimeOne({
-          label : date1.getHours() < 10 ? "0" + (date1.getHours()+1).toString() + ":00:00" : (date1.getHours()+1).toString() + ":00:00",
-          value : (date1.getHours()+1).toString()
-        })
-        date1.setHours(date1.getHours()+1)
-        date1.setMinutes(0)
-        date1.setSeconds(0)
-      }
-    }
-  }, [date1])
-
-  useEffect(() => {
-    if(date2 !== null && date1 !== null){
-      if (date1.toLocaleDateString() === date2.toLocaleDateString()){
-        setTimeTwo({
-          label : date2.getHours() < 10 ? "0" + (date2.getHours()+2).toString() + ":00:00" : (date2.getHours()+2).toString() + ":00:00",
-          value : (date2.getHours()+2).toString()
-        })
-        date2.setHours(date2.getHours()+2)
-        date2.setMinutes(0)
-        date2.setSeconds(0)
-      } else {
-        setTimeTwo({
-          label : (date2.getHours()).toString() + ":00:00"
-        })
-        date2.setHours(date2.getHours())
-        date2.setMinutes(0)
-        date2.setSeconds(0)
-      }
-      date2.setMinutes(0)
-      date2.setSeconds(0)
-    }
-  }, [date2])
-
-  useEffect(() => {
-    if(date1 !== null && date2 !== null && noHP.length >= 12 && option !== null && nama !== null && timeOne !== null & timeTwo !== null){
+    if(noHP.length >= 12 && selectedOption !== null && nama !== null){
       setButtonActive(true)
     } else {
       setButtonActive(false)
     }
-  }, [nama, noHP, option, date1 , date2, timeOne, timeTwo])
+  }, [nama, noHP, selectedOption])
 
 
   return(
@@ -194,35 +139,36 @@ const BookOffice = () => {
         <div className="flex justify-between gap-[120px]">
           
           <div className="w-1/2 flex flex-col gap-3">
-            <InputTextField label={"Nama"} disable={true} value={building}/>
-            <InputSelect label={"Alamat"} disable={true} placeholder={address}/>
-            <InputSelect label={"Lokasi"} disable={true} placeholder={lokasi}/>
+            <InputTextField label={"Nama"} disable={true} value={BuildingName}/>
+            <InputTextField label={"Alamat"} disable={true} placeholder={BuildingAddress}/>
+            <InputSelect label={"Lokasi"} disable={true} placeholder={BuildingLokasi}/>
           </div>
           <div className="w-1/2 flex flex-col gap-3">
-            {/* old */}
-            {/* <InputTextField label={"Nama Pemesan"} value={nama} setChange={setNama} placeholder={"Masukkan nama pemesan"}/> */}
-            {/* new */}
             <InputSelect value={nama} setChange={setNama} options={optionName} label={"Nama Pemesan"} placeholder={"Pilih Nama"}/>
             <InputTextField label={"Nomor Telepon"} value={noHP} setChange={(e) => setNoHP(e.target.value)} placeholder={"Masukkan nomor telepon"}/>
-            <InputSelect value={option} setChange={setoption} options={options} label={"Status Pembayaran"} placeholder={"Pilih Status"}/>
           </div>
         </div>
         <div className="flex justify-center mt-8">
-          <div className="">
-            <p className="text-[16px] leading-[18px] font-semibold mb-3 text-center">Tanggal Pemesanan</p>
+          <div className="w-[55%]">
+            <p className="text-[16px] leading-[18px] font-semibold mb-3 text-center">Periode Tersedia</p>
             <div className="flex gap-[15px]">
-              <div className="flex flex-col gap-[6px] w-[250px]">
-                <InputDate date={date1} setDate={setDate1}/>
-                <InputDate date={date2} setDate={setDate2}/>
-              </div>
-              <div className="flex flex-col w-[250px]">
-                <InputSelect value={timeOne} placeholder={"Pilih Jam Mulai"} optionsDisable={(option) => option.value <= conditionalFirstDate()} setChange={(e) => handleTimeChange(date1, e.value, setTimeOne)} options={time} padding={'1px'} border={"#07072370"}/>
-                <InputSelect value={timeTwo} placeholder={"Pilih Jam Mulai"} optionsDisable={(option) => option.value <= conditionalSecondDate()} setChange={(e) => handleTimeChange(date2, e.value, setTimeTwo)} options={time} padding={'1px'} border={"#07072370"}/>
-              </div>
+              <InputSelect value={selectedOption} options={options} setChange={setSelectedOption} placeholder={"Pilih Periode"}/>
             </div>
-
           </div>
         </div>
+        {
+          error.length > 0 ? 
+          <div className="flex justify-center">
+            <div>
+              {
+                error.map((data, index) => (
+                  <p key={index}>{data}</p>
+                ))
+              }
+            </div>
+          </div> 
+          : ""
+        }
         <div className="flex justify-center mt-8">
           <button className={`py-[17px] rounded ${buttonActive ? "bg-[#197BEB]" : "bg-[#197BEB]/50"}  w-[336px]`} disabled={buttonActive ? false : true} onClick={() => {Booking()}}>
             <p className="font-bold text-[14px] leading-4 text-white" style={{ fontStyle : "normal" }}>Pesan Kantor</p>
