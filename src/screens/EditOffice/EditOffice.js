@@ -249,10 +249,28 @@ const EditOffice = () => {
     })
     
     console.log("===== Delete =====")
-    console.log(TempDelete)
-    // TempDelete.fasilTerdekat.map((data) => {
+    // console.log(TempDelete)
 
-    // })
+    TempDelete.fasilTerdekat.map((data) => {
+      const formData = new FormData();
+      formData.append('id_building', buildingID);
+      formData.append('id_facility', data)
+      // console.log(formData)
+      axiosInstance({
+        method: "delete",
+        url: "/api/v1/nearby/delete",
+        data: formData,
+        headers: { 
+          'Authorization' : `Bearer ${Cookies.get("token")}`,
+          "Content-Type": "multipart/form-data" 
+        },
+      }).then((res) => {
+        console.log(res)
+      }).catch((e) => {
+        // console.log(e.message)
+        tempError.push("Post Image Failed : " +e.message)
+      })
+    })
 
     TempDelete.images.map((data) => {
       axiosInstance
@@ -446,11 +464,19 @@ const EditOffice = () => {
       }
     })
 
-    console.log("===== Still Remain =====")
-    if (tempError.length === 0){
-      window.location.reload();
-    } 
-    setError(tempError) 
+    console.log("===== Error =====")
+    
+    var delayInMilliseconds = 3000; //3 second
+
+    setTimeout(function() {
+      console.log(tempError)
+      if (tempError.length === 0){
+        window.location.reload();
+      }
+      setError(tempError) 
+    }, delayInMilliseconds);
+
+    
   }
 
   

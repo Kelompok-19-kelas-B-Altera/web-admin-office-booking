@@ -5,8 +5,10 @@ import {
   handleTotalData,
   handleTotalPage,
 } from "../../utils/redux/features/entriesAndPaginateSlice";
+import { useNavigate } from "react-router-dom";
 
 const OfficeAvailable = () => {
+  var navigate = useNavigate()
   let [listBuildings, setListBuildings] = useState([]);
   let [listBuildingsSearched, setListBuildingsSearched] = useState([]);
   const [triggerRequestOnDelete, setTriggerRequestOnDelete] = useState(false);
@@ -131,27 +133,6 @@ const OfficeAvailable = () => {
 
       {/* Content */}
       <div className="min-h-[308px]">
-<<<<<<< HEAD
-        {listBuildings?.map((e, index) => (
-          <div className="flex justify-self-auto text-base text-[#070723] mt-[12px]" key={index}>
-            <p className="mr-[32px] w-[21px] my-auto text-center">{index + 1}</p>
-            <div className="flex items-center w-[332px] mr-[32px] flex-1">
-              <img
-                src={e.images[e.images.length-1].image_url}
-                alt="photo-profile"
-                className="w-[50px] h-[50px] rounded-full object-cover mr-[32px]"
-              />
-              <p className="w-[250px] capitalize">{e.building_name}</p>
-            </div>
-            <p className="mr-[32px] w-[250px] my-auto capitalize flex-1">{e.address}</p>
-            <div className="flex gap-2 w-[200px] flex-1">
-              <button className="min-w-[369px] w-full h-[43px] bg-[#197beb] rounded text-white">
-                Pesan 
-              </button>
-            </div>
-          </div>
-        ))}
-=======
         {!listBuildings || inputSearch ? (
           <>
             {listBuildingsSearched?.map((e, index) => {
@@ -172,7 +153,7 @@ const OfficeAvailable = () => {
                   </div>
                   <p className="mr-[32px] w-[250px] my-auto capitalize flex-1">{e.address}</p>
                   <div className="flex gap-2 w-[200px] flex-1">
-                    <button className="min-w-[369px] w-full h-[43px] bg-[#197beb] rounded text-white">
+                    <button className="min-w-[369px] w-full h-[43px] bg-[#197beb] rounded text-white" onClick={() => {navigate("/Office/available-office/" + e.id +"/book-office")}}>
                       Pesan
                     </button>
                   </div>
@@ -200,8 +181,8 @@ const OfficeAvailable = () => {
                   </div>
                   <p className="mr-[32px] w-[250px] my-auto capitalize flex-1">{e.address}</p>
                   <div className="flex gap-2 w-[200px] flex-1">
-                    <button className="min-w-[369px] w-full h-[43px] bg-[#197beb] rounded text-white">
-                      Pesan
+                    <button className="min-w-[369px] w-full h-[43px] bg-[#197beb] rounded text-white" onClick={() => {navigate("/Office/available-office/" + e.id +"/book-office")}}>
+                      Pesan 
                     </button>
                   </div>
                 </div>
@@ -209,7 +190,6 @@ const OfficeAvailable = () => {
             })}
           </>
         )}
->>>>>>> 7b135799eea2b99971ce582db320af6d43bf08c1
       </div>
       {/* Content */}
     </div>
