@@ -83,7 +83,7 @@ const OfficeAvailable = () => {
             <p className="mr-[32px] w-[21px] my-auto text-center">{index + 1}</p>
             <div className="flex items-center w-[332px] mr-[32px] flex-1">
               <img
-                src={e.images[e.images.length-1].image_url}
+                src={e.images[e.images.length-1]?.image_url}
                 alt="photo-profile"
                 className="w-[50px] h-[50px] rounded-full object-cover mr-[32px]"
               />
