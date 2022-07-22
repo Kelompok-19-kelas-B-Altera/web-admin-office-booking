@@ -3,6 +3,10 @@ import { useEffect, useState } from "react";
 import Cookies from 'js-cookie';
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../networks/apis";
+import {
+  GET_CHAT_ROOM_USER_CONTAIN,
+} from "../../networks/graphql/gql";
+import { useQuery } from "@apollo/client";
 
 const HomeDashboard = () => {
   const navigate = useNavigate()
@@ -10,6 +14,11 @@ const HomeDashboard = () => {
   const [Available, setAvailable] = useState(0);
   const [Booked, setBooked] = useState(0);
   const [Users, setUsers] = useState(0);
+  const {
+    loading: chatRoomLoading,
+    error: chatRoomError,
+    data: chatRoomData,
+  } = useQuery(GET_CHAT_ROOM_USER_CONTAIN, { pollInterval: 3000 });
 
   useEffect(() => {
     if(Cookies.get("token") === undefined){
@@ -53,6 +62,34 @@ const HomeDashboard = () => {
         .then((res) => {
           // console.log(res.data.data.length)
           setBooked(res.data.data.length)
+        })
+        .catch((e) => {
+          console.log(e)
+        })
+
+      axiosInstance
+        .post("/api/v1/building/search", { 
+          "filters":[
+            {
+                "key": "isBooked",
+                "join": "scheduleList",
+                "operator": "EQUAL",
+                "field_type": "BOOLEAN",
+                "value": false
+            }
+          ],
+          "sorts":[],
+          "page":null,
+          "size":null
+        }, 
+        {
+          headers : {
+            'Authorization' : `Bearer ${Cookies.get("token")}`
+          }
+        })
+        .then((res) => {
+          // console.log(res.data.data.content)
+          setAvailable(res.data.data.content.length)
         })
         .catch((e) => {
           console.log(e)
