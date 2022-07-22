@@ -5,8 +5,10 @@ import {
   handleTotalData,
   handleTotalPage,
 } from "../../utils/redux/features/entriesAndPaginateSlice";
+import { useNavigate } from "react-router-dom";
 
 const OfficeAvailable = () => {
+  var navigate = useNavigate()
   let [listBuildings, setListBuildings] = useState([]);
   let [listBuildingsSearched, setListBuildingsSearched] = useState([]);
   const [triggerRequestOnDelete, setTriggerRequestOnDelete] = useState(false);
@@ -151,7 +153,7 @@ const OfficeAvailable = () => {
                   </div>
                   <p className="mr-[32px] w-[250px] my-auto capitalize flex-1">{e.address}</p>
                   <div className="flex gap-2 w-[200px] flex-1">
-                    <button className="min-w-[369px] w-full h-[43px] bg-[#197beb] rounded text-white">
+                    <button className="min-w-[369px] w-full h-[43px] bg-[#197beb] rounded text-white" onClick={() => {navigate("/Office/available-office/" + e.id +"/book-office")}}>
                       Pesan
                     </button>
                   </div>
@@ -179,8 +181,8 @@ const OfficeAvailable = () => {
                   </div>
                   <p className="mr-[32px] w-[250px] my-auto capitalize flex-1">{e.address}</p>
                   <div className="flex gap-2 w-[200px] flex-1">
-                    <button className="min-w-[369px] w-full h-[43px] bg-[#197beb] rounded text-white">
-                      Pesan
+                    <button className="min-w-[369px] w-full h-[43px] bg-[#197beb] rounded text-white" onClick={() => {navigate("/Office/available-office/" + e.id +"/book-office")}}>
+                      Pesan 
                     </button>
                   </div>
                 </div>
