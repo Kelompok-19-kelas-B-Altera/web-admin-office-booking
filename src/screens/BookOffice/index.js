@@ -53,8 +53,12 @@ const BookOffice = () => {
     axiosInstance
     .get("/api/v1/building/" + buildingID)
     .then((res) => {
-      var schedule = []
-      schedule = res.data.data.schedules.map((data) => {
+      // console.log(res)
+      var filter = []
+      filter = res.data.data.schedules.filter((data) => {
+        return data.ready === true & data.booked === false
+      })
+      var schedule = filter.map((data) => {
         return {
           value : data.id,
           label : "FROM : " + formatingDate(data.from_date) + " | TO : " + formatingDate(data.until_date)
@@ -115,6 +119,7 @@ const BookOffice = () => {
         var errorMsg = [...error]
         errorMsg.push("Booking Failed : " +e.message)
         setError(errorMsg)
+        console.log(e)
       })
   }
 
